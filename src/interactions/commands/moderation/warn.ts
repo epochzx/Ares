@@ -69,7 +69,7 @@ export const command: SlashCommand = {
                 .setColor(data.colours.error as ColorResolvable)
                 .setDescription(`
                     ${data.emojis.message} **Reason:** \`${reason}\` \n` +
-                    `${data.emojis.adminUser} **Moderator:** <@${interaction.member?.user.id}> (\`${interaction.member?.user.id}) \n` +
+                    `${data.emojis.adminUser} **Moderator:** <@${interaction.member?.user.id}> (\`${interaction.member?.user.id}\`) \n` +
                     `${data.emojis.picture} **Evidence:** ${evidence}`)
                 .setAuthor({
                     iconURL: interaction.guild.iconURL() as string, 

@@ -56,6 +56,7 @@ export async function logModerationAction(targetId: string, moderatorId: string,
             'Unmute', 
             'Infractions Cleared', 
             'Infraction Removed', 
+            'Messages Purged', 
             'Unban', 
             'Unban (Manual)', 
             'Unmute (Manual)'

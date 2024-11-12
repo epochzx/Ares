@@ -1,6 +1,8 @@
 import { SlashCommandBuilder, TextChannel, PermissionFlagsBits, Message, User } from 'discord.js';
 import { SlashCommand } from '../../../types';
 import { pluralize, reply } from '../../../utils/replyHelper';
+import { logModerationAction } from '../../../services/loggingService';
+import data from '../../../data.json';
 
 export const command: SlashCommand = {
     command: new SlashCommandBuilder()
@@ -173,10 +175,21 @@ export const command: SlashCommand = {
         if (subCommand === 'all') {
             try {
                 await channel.bulkDelete(messages);
-                await reply(true, `Purged \`${limit}\` ${suffix}.`, interaction);
+                await reply(true, `Purged \`${suffix}\`.`, interaction, undefined, false, interaction.options.getBoolean('silent') as boolean);
             } catch (error) {
-                await reply(false, `Could not purge messages: ${error}`, interaction);
+                await reply(false, `Could not purge messages: ${error}`, interaction, undefined, false, interaction.options.getBoolean('silent') as boolean);
             }
+
+            const logInfo = `${data.emojis.delete} **Amount:** \`${limit}\` \n` +
+                `${data.emojis.filter} **Criteria:** \`all\` \n` +
+                `${data.emojis.message} **Channel:** <#${interaction.channel?.id}> (\`${interaction.channel?.id}\`)`;
+
+            try {
+                await logModerationAction(interaction.member?.user.id as string, interaction.member?.user.id as string, interaction.guild?.id as string, `Messages Purged`, `N/A`, 0, `yellow`, null, null, logInfo);
+            } catch (error) {
+                await reply(false, `An error occurred when trying to log this action: ${error}. Messages have still been successfully purged.`, interaction, undefined, false, interaction.options.getBoolean('silent') as boolean);
+            }
+
             return;
         }
 
@@ -235,18 +248,22 @@ export const command: SlashCommand = {
         limit = messagesArray.length;
         const filteredSuffix = pluralize(limit, `message`);
 
+        const logInfo = `${data.emojis.delete} **Amount:** \`${limit}\` \n` +
+            `${data.emojis.filter} **Criteria:** \`${subCommand}\` \n` +
+            `${data.emojis.message} **Channel:** <#${interaction.channel?.id}> (\`${interaction.channel?.id}\`)`;
+
         try {
             await channel.bulkDelete(messagesArray);
-            await reply(true, `Purged \`${filteredSuffix}\`.`, interaction);
+            await reply(true, `Purged \`${filteredSuffix}\`.`, interaction, undefined, false, interaction.options.getBoolean('silent') as boolean);
         } catch (error) {
-            await reply(false, `Could not purge messages: ${error}`, interaction);
+            await reply(false, `Could not purge messages: ${error}`, interaction, undefined, false, interaction.options.getBoolean('silent') as boolean);
         }
 
-        /*try {
-            await logModerationAction(interaction.member?.user.id, interaction.member?.user.id, interaction.guild?.id, `Messages Purged`, `\`N/A\``, )
+        try {
+            await logModerationAction(interaction.member?.user.id as string, interaction.member?.user.id as string, interaction.guild?.id as string, `Messages Purged`, `N/A`, 0, `yellow`, null, null, logInfo);
         } catch (error) {
-            await reply(false, `An error occurred when trying to log this purge: ${error}. ${filteredSuffix} have still been successfully purged.`, interaction)
-        }*/
+            await reply(false, `An error occurred when trying to log this action: ${error}. Messages have still been successfully purged.`, interaction, undefined, false, interaction.options.getBoolean('silent') as boolean);
+        }
     }
 };
 
