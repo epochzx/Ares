@@ -1,0 +1,91 @@
+{
+  "images": {
+    "ares": "https://imgur.com/6E6rF0Y.png"
+  },
+  
+  "channels": {
+    "releaseLogging": "1280463342947008544",
+    "processLogging": "1282908088189583461",
+    "errorLogging": "1280463471489847326",
+    "interactionLogging": "1218156443635552326"
+  },
+
+  "colours": {
+    "success": "248046",
+    "caution": "ed9d42",
+    "error": "ed4245",
+    "blue": "454FBF"
+  },
+
+  "dod": {
+    "duties": {
+      "PKSF": "PKSF Duties",
+      "MDF": "MDF Duties",
+      "SC": "SC Duties",
+      "ARD": "ARD Duties",
+      "AIA": "AIA Duties",
+      "STHD": "STHD Duties"
+    },
+
+    "groupIds": {
+      "PKSF": 2877619,
+      "MDF": 2806959,
+      "SC": 2873429,
+      "ARD": 2877598,
+      "AIA": 4750377,
+      "STHD": 2825616
+    }
+  },
+
+  "emojis": {
+    "success": "<:check:1260834393581162496>",
+    "failure": "<:error:1260833964638339142>",
+    "caution": "<:info:1281968220256997407>",
+    "failureFilled": "<:errorFilled:1260930574277808158>",
+
+    "clear": "<:clear:1301101066884091924>",
+    "delete": "<:delete:1301464766845554688>",
+    "play": "<:round_play_arrow_white_48dp:1129316616346288148>",
+
+    "id": "<:sid:1260861376784760904>",
+    "colour": "<:colour:1282609320131035187>",
+    "position": "<:position:1282610885185114112>",
+    "ping": "<:ping2:1282609402423152651>",
+    "hoisted": "<:hoisted:1282609608380252251>",
+    "user": "<:round_person_white_48dp:1224579843950379100>",
+    "userGroup": "<:round_group_white_48dp:1208298524530450462>",
+    "adminUser": "<:admin:1260931922448879659>",
+    "reason": "<:reason:1301054021238394901>",
+    "hashtag": "<:hashtag:1301057331014008843>",
+
+    "message": "<:chat:1260844628530303058>",
+    "edit": "<:round_edit_white_48dp:1129327368503308319>",
+    "filter": "<:filter:1281964604926201878>",
+    "time": "<:round_watch_later_white_48dp:1129325788244742204>",
+    "timer": "<:round_timer_white_48dp:1129326172124233758>",
+    "duration": "<:duration:1301018408590118933>",
+
+    "send": "<:send:1260844629981396993>",
+    "end": "<:round_stop_white_48dp:1129316770298204250>",
+    "sendCancel": "<:send2:1260849071317319772>",
+    "reply": "<:reply:1282918434749026354>",
+
+    "signature": "<:signature:1260844626835931147>",
+
+    "chevronLeft": "<:left:1261524793644286013>",
+    "chevronRight": "<:right:1261524792084009102>",
+
+    "doubleChevronLeft": "<:doubleChevronLeft:1301053229869568072>",
+    "doubleChevronRight": "<:doubleChevronRight:1301053232398995489>",
+
+    "alertBell": "<:reminder:1281598422213988435>",
+    "timerVital": "<:timerVital:1301515415049998408>",
+    "checkBox": "<:round_check_box_white_48dp:1129336029321629777>",
+    "bin": "<:round_delete_white_48dp:1129336393475301416>",
+    "picture": "<:round_image_white_48dp:1211946326401486889>",
+    "info": "<:round_info_white_48dp:1211959054625144833>",
+    "link": "<:round_link_white_48dp:1213760403402793001>",
+
+    "folder": "<:folder:1299664432363733072>"
+  }
+}
