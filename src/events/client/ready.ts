@@ -12,8 +12,7 @@ const event: BotEvent = {
 
     execute: async (client: Client) => {
         console.log('✅  Bot online');
-        console.log('✅  Latest version');
-
+        
         client.user?.setPresence({
             activities: [{name: 'the world burn', type: ActivityType.Watching}],
             status: PresenceUpdateStatus.DoNotDisturb,
