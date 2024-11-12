@@ -4,7 +4,6 @@
   "main": "index.js",
   "scripts": {
     "clean": "rimraf dist",
-    "prebuild": "ncu --upgrade && npm install",
     "build": "tsc",
     "start": "npm run clean && npm run build && node dist/index.js",
     "dev": "npx nodemon src/index.ts"
