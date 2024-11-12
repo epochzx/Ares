@@ -2,6 +2,8 @@ import { Client, Collection, IntentsBitField, Options } from 'discord.js';
 import { readdirSync } from 'fs';
 import { join } from 'path';
 import { SlashCommand } from './types';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { getMongoClient } from './services/dbService';
 
 import 'dotenv/config';
@@ -60,7 +62,7 @@ async function start() {
     await eventsHandler.default(client);
 
     // connect to mongodb and login
-    await getMongoClient();
+    //await getMongoClient();
     await client.login(process.env.token);
 
     // load commands, modals and components
