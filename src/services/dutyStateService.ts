@@ -34,12 +34,12 @@ export async function reconcileDutyStates(): Promise<void> {
     const activeDutyStates = await getDocuments('aresDutyStates', {});
 
     if (!activeDutyStates.length) {
-        console.log('    No active duty states');
+        console.log('   No active duty states');
 
         return;
     }
 
-    console.log(`    ${pluralize(activeDutyStates.length, 'active duty state')}`);
+    console.log(`   ${pluralize(activeDutyStates.length, 'active duty state')}`);
 
     const timeNow = Math.round(Date.now() / 1000);
 
