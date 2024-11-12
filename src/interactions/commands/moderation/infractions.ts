@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, ColorResolvable, User, CommandInteraction, ButtonInteraction } from 'discord.js';
+import { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, ColorResolvable, User, CommandInteraction, ButtonInteraction, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'discord.js';
 import { SlashCommand } from '../../../types';
 import { getPrimaryColour, pluralize, reply, splitIntoGroups } from '../../../utils/replyHelper';
 import { infractionToString } from '../../../utils/moderationHelper';
@@ -299,11 +299,19 @@ export const command: SlashCommand = {
                     .setTitle(`Infraction ${interaction.options.getNumber('id')}`)
                     .setDescription(baseInfo);
 
+                const deleteButton = new ButtonBuilder()  
+                    .setLabel('Delete Infraction')
+                    .setStyle(ButtonStyle.Danger)
+                    .setEmoji(data.emojis.delete)
+                    .setCustomId('deleteInfraction');
+
+                const actionRow = new ActionRowBuilder<ButtonBuilder>()
+                    .setComponents(deleteButton);
+
                 await interaction.editReply({
                     embeds: [infractionEmbed], 
+                    components: [actionRow],
                 });
-
-                // TODO: Component for removing interaction
 
                 break;
             }

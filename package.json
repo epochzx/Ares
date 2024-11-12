@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "update": "ncu --upgrade && npm install",
     "clean": "rimraf dist",
+    "prebuild": "ncu --upgrade && npm install",
     "build": "tsc",
     "start": "npm run clean && npm run build && node dist/index.js",
     "dev": "npx nodemon src/index.ts"
