@@ -17,8 +17,8 @@ export const command: SlashCommand = {
                 .setRequired(true))
         .addBooleanOption(option => 
             option.setName('silent')
-                .setDescription(`Delete this users message history over 7 days`)
-                .setRequired(true))
+                .setDescription(`Do not delete this users message history over 7 days`)
+                .setRequired(false))
         .addStringOption(option => 
             option.setName('duration')
                 .setDescription('Duration of ban'))
@@ -84,7 +84,7 @@ export const command: SlashCommand = {
         const guild = interaction.guild;
         if (!guild) { return; }
 
-        const deleteMessages = interaction.options.getBoolean('deleteMessages');
+        const deleteMessages = interaction.options.getBoolean('silent');
         let deleteMessagesSeconds;
 
         if (!deleteMessages) {

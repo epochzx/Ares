@@ -65,13 +65,13 @@ export async function getDivision(username: string) {
                 ([, id]) => id === lowestRankGroup.Id
             )?.[0];
             
-            return lowestGroupKey ? `${lowestGroupKey} duties` : 'No matching group found';
+            return lowestGroupKey ? `${lowestGroupKey} duties` : 'Guarding the border';
         } else {
             return `${Object.keys(data.dod.groupIds).find(key => data.dod.groupIds[key as keyof typeof data.dod.groupIds] === matchingGroups[0].Id)} duties`;
         }
 
     } catch (error) {
-        handleError(error as Error, `Failed to get user's Aegis division`);
+        await handleError(error as Error, `Failed to get user's Aegis division`);
         return 'Guarding the border';
     }
 }
