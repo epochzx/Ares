@@ -41,7 +41,7 @@ const command: SlashCommand = {
 
         const clean = async (text: string) => {
             if (typeof text !== 'string') {
-                // eslint-disable-next-line @typescript-eslint/no-require-imports
+                // eslint-disable-next-line @typescript-eslint/no-var-requires
                 text = require('util').inspect(text, {depth: 1});
             }
 

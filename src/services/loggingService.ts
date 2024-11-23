@@ -143,12 +143,12 @@ export async function logDeletedMessage(message: Message, logChannel: TextChanne
                 title = `Automod Trigger Deletion`;
                 regexMatch = findInvalidCharacter(message.content);
             }
-        };
+        }
     } catch (error) {
         await handleError(error as Error, `Failed to log a deleted message`);
 
         return;
-    };
+    }
 
     contentToLog = contentToLog.replace(/`/g, '');
 

@@ -4,7 +4,7 @@ import data from '../data.json';
 import { formatTimeUntil } from './miscHelper';
 import { Infraction } from '../types';
 
-export async function verifyTarget(target: GuildMember | null, interaction: ChatInputCommandInteraction): Promise<boolean> {
+export async function verifyTarget(target: GuildMember | null, interaction: ChatInputCommandInteraction): Promise<boolean | null> {
     if (!target) {
         await reply(false, `This user is not in the server.`, interaction);
         return false;
@@ -15,7 +15,10 @@ export async function verifyTarget(target: GuildMember | null, interaction: Chat
         return false;
     }
 
-    if (target.roles.highest.position >= interaction.guild!.members.me!.roles.highest.position) {
+    if (!interaction.guild) { return null; }
+    if (!interaction.guild.members.me) { return null; }
+
+    if (target.roles.highest.position >= interaction.guild.members.me.roles.highest.position) {
         await reply(false, `<@${target.id}> has a higher or equal role to me.`, interaction);
         return false;
     }
@@ -69,7 +72,7 @@ export async function getDuration(duration: string): Promise<number | boolean> {
     };
 
     return time * unitToMilliseconds[unit];
-};
+}
 
 export async function infractionToString(infraction: Infraction): Promise<string> {
     let baseInfo = `${data.emojis.id} **Infraction ID:** \`${infraction.time}\` \n` +

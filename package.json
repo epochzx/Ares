@@ -17,8 +17,10 @@
     "dotenv": "^16.4.5",
     "fs": "^0.0.1-security",
     "mongodb": "^6.11.0",
+    "mongoose": "^8.8.2",
     "noblox.js": "^6.0.2",
     "nodemon": "^3.1.7",
+    "prettier": "^3.3.3",
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"

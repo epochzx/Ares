@@ -23,8 +23,8 @@ const event: Modal = {
 
         if (interaction.member?.user.id == '366013757702275073') {
             title = 'PKSF Duties';
-        };
-
+        }
+        
         const dutyStateDocument = await getOneDocument<DutyState>(`aresDutyStates`, { threadId: interaction.channel.id });
         if (!dutyStateDocument) { return; }
 
@@ -43,7 +43,7 @@ const event: Modal = {
 
         if (interaction.member.user.id == '366013757702275073') {
             username = 'ZenithVale';
-        };
+        }
 
         let dutyStateDescription = `Username: ${username} \n` +
             `Duty: ${title} \n${dutyPicture} \n \n` +
@@ -63,7 +63,7 @@ const event: Modal = {
             if (durationSeconds >= breakpoints[i] && durationSeconds <= breakpoints[i + 1]) {
                 expectedPoints = i;
                 break;
-            };
+            }
         }
 
         const dutyStateEmbed = new EmbedBuilder()

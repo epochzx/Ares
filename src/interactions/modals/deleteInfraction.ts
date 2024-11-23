@@ -11,7 +11,7 @@ const event: Modal = {
     customId: `deleteInfraction`,
 
     execute: async (interaction: ModalSubmitInteraction) => {
-        if (!interaction.message) { return; };
+        if (!interaction.message) { return; }
 
         const guild = interaction.guild;
         if (!guild) { return; }
@@ -19,7 +19,7 @@ const event: Modal = {
         const reason = interaction.fields.getTextInputValue('reason');
 
         const embed = interaction.message.embeds[0];
-        if (!embed) { return; };
+        if (!embed) { return; }
 
         const infractionId = embed.title?.replace(/\D/g, '');
         const infraction = await getOneDocument<Infraction>(`infractions`, { time: parseInt(infractionId as string), guildId: guild.id });

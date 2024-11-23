@@ -38,7 +38,7 @@ async function start(): Promise<void> {
 
     // load commands, modals and components
     readdirSync(handlersDir).forEach(async (handler) => {
-        if (handler == 'eventHandler.ts' || handler == 'eventHandler.js') { return; };
+        if (handler == 'eventHandler.ts' || handler == 'eventHandler.js') { return; }
 
         const handlerPath = join(handlersDir, handler);
         const handlerModule = await import(handlerPath);

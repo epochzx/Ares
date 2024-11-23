@@ -1,5 +1,6 @@
 import { handleError} from '../utils/errorHandler';
 import { MongoClient, Document, WithId } from 'mongodb';
+import mongoose from 'mongoose';
 import settings from '../settings.json';
 
 let mongoClient: MongoClient | null = null;
@@ -97,7 +98,7 @@ export async function updateDocument(collectionName: string, query: object, upda
         throw new Error(`Failed to write data to the database: ${error}`);
     }
 }
-
+    
 export async function getMongoClient(): Promise<MongoClient | null> {
     if (!settings.loadMongoDB) {
         console.log(`✖️   MongoDB loading has been disabled`);
@@ -108,8 +109,9 @@ export async function getMongoClient(): Promise<MongoClient | null> {
         if (!mongoClient) {
             mongoClient = new MongoClient(process.env.mongodb as string);
 
-            await mongoClient.connect();
-            console.log('✅  Successfully connected to MongoDB');
+            await mongoose.connect(process.env.mongodb as string).then(() => {
+                console.log('✅  Successfully connected to MongoDB');
+            });
         }
 
         return mongoClient;
