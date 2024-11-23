@@ -3,13 +3,13 @@ import { MongoClient, Document, WithId, Db } from 'mongodb';
 import mongoose from 'mongoose';
 import settings from '../settings.json';
 
-let mongoClient: MongoClient | null = null;
+export let mongoClient: MongoClient | null = null;
 let db: Db | null = null;
 
 export async function getDocuments<T extends Document>(collectionName: string, query: object, sort?: object): Promise<WithId<T>[]> {
     try {
         if (!mongoClient || !db) {
-            return [];
+            throw new Error(`MongoClient or DB missing`);
         }
 
         const collection = db.collection<T>(collectionName);
@@ -28,7 +28,7 @@ export async function getDocuments<T extends Document>(collectionName: string, q
 export async function getOneDocument<T extends Document>(collectionName: string, query: object): Promise<WithId<T> | null> {
     try {
         if (!mongoClient || !db) { 
-            return null; 
+            throw new Error(`MongoClient or DB missing`);
         }
 
         const collection = db.collection<T>(collectionName);
@@ -39,10 +39,10 @@ export async function getOneDocument<T extends Document>(collectionName: string,
     }
 }
 
-export async function createDocument(collectionName: string, document: object): Promise<boolean | undefined> {
+export async function createDocument(collectionName: string, document: object): Promise<boolean> {
     try {
         if (!mongoClient || !db) { 
-            return; 
+            throw new Error(`MongoClient or DB missing`);
         }
 
         const collection = db.collection(collectionName);
@@ -58,7 +58,7 @@ export async function createDocument(collectionName: string, document: object): 
 export async function deleteDocument(collectionName: string, query: object): Promise<boolean | undefined> {
     try {
         if (!mongoClient || !db) { 
-            return; 
+            throw new Error(`MongoClient or DB missing`); 
         }
 
         const collection = db.collection(collectionName);
@@ -77,10 +77,10 @@ export async function deleteDocument(collectionName: string, query: object): Pro
     }
 }
 
-export async function updateDocument(collectionName: string, query: object, updateParams: object): Promise<boolean | undefined> {
+export async function updateDocument(collectionName: string, query: object, updateParams: object): Promise<boolean> {
     try {
         if (!mongoClient || !db) { 
-            return; 
+            throw new Error(`MongoClient or DB missing`);
         }
 
         const collection = db.collection(collectionName);
