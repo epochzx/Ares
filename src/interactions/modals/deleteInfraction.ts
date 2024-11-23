@@ -26,7 +26,7 @@ const event: Modal = {
 
         if (!infraction) {
             await reply(false, `This infraction does not exist.`, interaction, undefined, false, false);
-            await interaction.message.edit({components: []});
+            await interaction.message.edit({ components: [] });
 
             return;
         }
@@ -36,6 +36,8 @@ const event: Modal = {
 
             return;
         }
+
+        await interaction.message.edit({ components: [] });
 
         const baseInfo = await infractionToString(infraction);
 
