@@ -1,4 +1,4 @@
-import {  SlashCommandBuilder, CommandInteraction, Collection, ButtonInteraction, ModalSubmitInteraction, ChatInputCommandInteraction, } from 'discord.js';
+import { SlashCommandBuilder, CommandInteraction, Collection, ButtonInteraction, ModalSubmitInteraction, ChatInputCommandInteraction, } from 'discord.js';
 
 export interface SlashCommand {
     command: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
@@ -69,11 +69,8 @@ export interface UserTimezone {
     gmtOffset: string,
 }
 
-export type GuildOption = keyof GuildOptions;
-
 declare module 'discord.js' {
     export interface Client {
-        slashCommands: Collection<string, SlashCommand>;
-        commands: Collection<string, Command>;
+        commands: Collection<string, SlashCommand>;
     }
 }

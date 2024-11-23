@@ -53,7 +53,7 @@ const event: BotEvent = {
                 setInterval(() => {
                     const memory = Math.floor(memoryUsage.rss() / 1000000);
                     console.log(memory);
-                }, 1800);
+                }, 1800000);
 
                 break;
             }

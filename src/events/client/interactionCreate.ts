@@ -18,6 +18,7 @@ const event: BotEvent = {
         switch (type) {
             case 2: { // commands
                 const command = client.commands.get(interaction.commandName);
+                if (!command) { return; }
 
                 try {
                     await command.execute(interaction);

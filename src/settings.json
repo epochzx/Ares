@@ -1,9 +1,9 @@
 {
-    "loadCommands": false,
-    "loadComponents": false,
-    "loadModals": false,
+    "loadCommands": true,
+    "loadComponents": true,
+    "loadModals": true,
     "loadCron": false,
-    "loadGuildEvents": false,
+    "loadGuildEvents": true,
     "loadExistingDutyStates": true,
-    "loadMongoDB": true
+    "loadMongoDB": false
 }
