@@ -9,6 +9,7 @@ import { handleError } from '../../utils/errorHandler';
 const event: BotEvent = {
     name: Events.MessageUpdate,
     once: false,
+    guild: true,
 
     execute: async (oldMessage: Message, newMessage: Message) => {
         if (!newMessage.author) {

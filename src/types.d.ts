@@ -20,6 +20,13 @@ export interface CronSchedule {
     execute: (interaction: () => void) => void;
 }
 
+export interface BotEvent {
+    name: string;
+    once?: boolean | false;
+    guild: boolean;
+    execute: (...args) => void;
+}
+
 export interface Infraction {
     userId: string;
     guildId: string;
@@ -42,12 +49,6 @@ interface DutyState {
 }
 
 export type GuildOption = keyof GuildOptions;
-
-export interface BotEvent {
-    name: string;
-    once?: boolean | false;
-    execute: (...args) => void;
-}
 
 declare module 'discord.js' {
     export interface Client {

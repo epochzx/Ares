@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { handleError} from '../utils/errorHandler';
 import { MongoClient } from 'mongodb';
+import settings from '../settings.json';
 
 let mongoClient: MongoClient | null = null;
 
-export async function getDocuments(collectionName: string, query: object, sort?: object): Promise<any[]> {
+export async function getDocuments(collectionName: string, query: object, sort?: object): Promise<any> {
     try {
         const mongoClient = await getMongoClient();
+
+        if (!mongoClient) { return null; }
         const db = mongoClient.db('main');
 
         const collection = db.collection(collectionName);
@@ -22,9 +25,11 @@ export async function getDocuments(collectionName: string, query: object, sort?:
     }
 }
 
-export async function getOneDocument(collectionName: string, query: object): Promise<any | null> {
+export async function getOneDocument(collectionName: string, query: object): Promise<any> {
     try {
         const mongoClient = await getMongoClient();
+
+        if (!mongoClient) { return; }
         const db = mongoClient.db('main');
 
         const collection = db.collection(collectionName);
@@ -35,9 +40,11 @@ export async function getOneDocument(collectionName: string, query: object): Pro
     }
 }
 
-export async function createDocument(collectionName: string, document: object): Promise<any | null> {
+export async function createDocument(collectionName: string, document: object): Promise<any> {
     try {
         const mongoClient = await getMongoClient();
+
+        if (!mongoClient) { return; }
         const db = mongoClient.db('main');
 
         const collection = db.collection(collectionName);
@@ -50,9 +57,11 @@ export async function createDocument(collectionName: string, document: object): 
     }
 }
 
-export async function deleteDocument(collectionName: string, query: object): Promise<any | null> {
+export async function deleteDocument(collectionName: string, query: object): Promise<any> {
     try {
         const mongoClient = await getMongoClient();
+
+        if (!mongoClient) { return; }
         const db = mongoClient.db('main');
 
         const collection = db.collection(collectionName);
@@ -71,9 +80,11 @@ export async function deleteDocument(collectionName: string, query: object): Pro
     }
 }
 
-export async function updateDocument(collectionName: string, query: object, updateParams: object): Promise<any | null> {
+export async function updateDocument(collectionName: string, query: object, updateParams: object): Promise<any> {
     try {
         const mongoClient = await getMongoClient();
+
+        if (!mongoClient) { return; }
         const db = mongoClient.db('main');
 
         const collection = db.collection(collectionName);
@@ -86,18 +97,21 @@ export async function updateDocument(collectionName: string, query: object, upda
     }
 }
 
-export async function getMongoClient(): Promise<MongoClient> {
+export async function getMongoClient(): Promise<MongoClient | null> {
+    if (!settings.loadMongoDB) {
+        console.log(`✖️   MongoDB loading has been disabled`);
+        return null;
+    }
+
     try {
         if (!mongoClient) {
             mongoClient = new MongoClient(process.env.mongodb as string);
 
             await mongoClient.connect();
             console.log('✅  Successfully connected to MongoDB');
-
-            return mongoClient;
-        } else {
-            return mongoClient;
         }
+
+        return mongoClient;
     } catch (error) {
         await handleError(error as Error, `MongoDB Client Connection Failure`);
         throw new Error(error as string);

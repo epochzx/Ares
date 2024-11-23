@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Client, Collection, IntentsBitField } from 'discord.js';
 import { readdirSync } from 'fs';
 import { join } from 'path';
@@ -28,31 +27,37 @@ client.commands = new Collection<string, SlashCommand>();
 const handlersDir = join(__dirname, './handlers');
 const eventsHandlerPath = join(handlersDir, 'eventHandler');
 
-async function start() {
+async function start(): Promise<void> {
     // load events
     const eventsHandler = await import(eventsHandlerPath);
     await eventsHandler.default(client);
 
     // connect to mongodb and login
-    //await getMongoClient();
+    await getMongoClient();
     await client.login(process.env.token);
 
     // load commands, modals and components
-    /*readdirSync(handlersDir).forEach(async (handler) => {
+    readdirSync(handlersDir).forEach(async (handler) => {
         if (handler == 'eventHandler.ts' || handler == 'eventHandler.js') { return; };
 
         const handlerPath = join(handlersDir, handler);
         const handlerModule = await import(handlerPath);
-    
-        handlerModule.default(client, client.commands);
-    });*/
+
+        await handlerModule.default(client, client.commands);
+    });
 }
 
-start();
+(async () => {
+    try {
+        await start();
+    } catch (error) {
+        console.error(`❌  Error logging in: ${error}`);
+    }
+})();
 
 process.on('unhandledRejection', async error => {
     await handleError(error as Error);
-	console.log(error);
+    console.log(error);
 
     return;
 });

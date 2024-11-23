@@ -3,14 +3,29 @@ import { join } from 'path';
 import { SlashCommand, Modal, Component } from '../types';
 import getFiles from '../utils/fileHelper';
 import { pluralize } from '../utils/replyHelper';
+import settings from '../settings.json';
 
 export const modalInteractions = new Collection<string, Modal>();
 export const componentInteractions = new Collection<string, Component>();
 
 export default async function loadInteractions(client: Client, clientCommands: Collection<string, SlashCommand>): Promise<void> {
-    await loadCommands(client, clientCommands);
-    await loadModals();
-    await loadComponents();
+    if (settings.loadCommands) {
+        await loadCommands(client, clientCommands);
+    } else {
+        console.log(`✖️   Command loading has been disabled`);
+    }
+
+    if (settings.loadModals) {
+        await loadModals();
+    } else {
+        console.log(`✖️   Modal loading has been disabled`);
+    }
+
+    if (settings.loadComponents) {
+        await loadComponents();
+    } else {
+        console.log(`✖️   Component loading has been disabled`);
+    }
 }
 
 async function loadCommands(client: Client, clientCommands: Collection<string, SlashCommand>): Promise<void> {

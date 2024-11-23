@@ -7,6 +7,7 @@ import { logDeletedMessage } from '../../services/loggingService';
 const event: BotEvent = {
     name: Events.MessageDelete,
     once: false,
+    guild: true,
 
     execute: async (message: Message) => {
         if (!message.author) {

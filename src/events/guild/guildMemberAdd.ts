@@ -7,6 +7,7 @@ import { logMemberJoinOrLeave } from '../../services/loggingService';
 const event: BotEvent = {
     name: Events.GuildMemberAdd,
     once: false,
+    guild: true,
 
     execute: async (member: GuildMember) => {
         const guild = member.guild;

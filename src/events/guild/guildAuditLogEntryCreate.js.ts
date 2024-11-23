@@ -8,6 +8,7 @@ import { client } from '../../index';
 const event: BotEvent = {
     name: Events.GuildAuditLogEntryCreate,
     once: false,
+    guild: true,
 
     execute: async (auditLog: GuildAuditLogsEntry, guild: Guild) => {
         if (auditLog.executorId == client.user?.id) { return; }

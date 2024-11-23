@@ -1,10 +1,16 @@
 
-/*import { join } from 'path';
-import getFiles from '../utils/fileHelper';*/
+import { join } from 'path';
+import getFiles from '../utils/fileHelper';
+import settings from '../settings.json';
 
 export default async function loadCronJobs(): Promise<void> {
-    return;
-    /*const cronJobsDir = join(__dirname, '../cronJobs');
+    if (!settings.loadCron) {
+        console.log(`✖️   Cron job loading has been disabled`);
+
+        return;
+    }
+
+    const cronJobsDir = join(__dirname, '../cronJobs');
     const cronJobFiles = getFiles(cronJobsDir);
 
     let loadedCount = 0;
@@ -26,5 +32,5 @@ export default async function loadCronJobs(): Promise<void> {
 
     if (loadedCount == 0) {
         console.log(`❌  0 cron jobs to load`);
-    }*/
+    }
 }

@@ -6,6 +6,7 @@ import { modalInteractions, componentInteractions } from '../../handlers/interac
 const event: BotEvent = {
     name: 'interactionCreate',
     once: false,
+    guild: false,
 
     execute: async (interaction) => {
         if (interaction.replied || interaction.deferred) {

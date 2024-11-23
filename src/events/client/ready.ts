@@ -5,22 +5,28 @@ import data from '../../data.json';
 import { reconcileDutyStates } from '../../services/dutyStateService';
 import { getPrimaryColour } from '../../utils/replyHelper';
 import { memoryUsage } from 'process';
+import settings from '../../settings.json';
 
 const event: BotEvent = {
     name: 'ready',
     once: true,
+    guild: false,
 
     execute: async (client: Client) => {
         console.log('✅  Bot online');
         
         client.user?.setPresence({
-            activities: [{name: 'the world burn', type: ActivityType.Watching}],
+            activities: [ { name: 'the world burn', type: ActivityType.Watching } ],
             status: PresenceUpdateStatus.DoNotDisturb,
         });
 
         if (process.env.environment) {
             if (process.env.environment == 'PROD') {
-                await reconcileDutyStates();
+                if (settings.loadExistingDutyStates) {
+                    await reconcileDutyStates();
+                } else {
+                    console.log(`✖️   Existing duty state loading has been disabled`);
+                }
 
                 const processLogs = client.channels.cache.get(data.channels.processLogging) as NewsChannel | TextChannel;
 

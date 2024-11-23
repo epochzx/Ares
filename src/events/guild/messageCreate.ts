@@ -7,6 +7,7 @@ import { handleAutoMod } from '../../utils/automodHandler';
 const event: BotEvent = {
     name: Events.MessageCreate,
     once: false,
+    guild: true,
 
     execute: async (message: Message) => {
         if (message.author.bot) {
