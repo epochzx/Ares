@@ -5,6 +5,7 @@ import { automod, findInvalidCharacter } from '../utils/automodHandler';
 import { getOneDocument } from './dbService';
 import { client } from '../index';
 import { getPrimaryColour } from '../utils/replyHelper';
+import { GuildLog } from '../types';
 
 export async function logModerationAction(targetId: string, moderatorId: string, guildId: string, action: string, reason: string, time: number, colour: string, evidence?: string | null, duration?: string | null, extra?: string | null): Promise<EmbedBuilder | undefined> {
     const colourMap: { [key: string]: string } = {
@@ -16,7 +17,7 @@ export async function logModerationAction(targetId: string, moderatorId: string,
 
     const embedColour = colourMap[colour];
 
-    const guildLogs = await getOneDocument(`modLogs`, { guildId: guildId });
+    const guildLogs = await getOneDocument<GuildLog>(`modLogs`, { guildId: guildId });
     if (!guildLogs) { return; }
 
     let logDescription: string;

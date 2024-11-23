@@ -1,4 +1,4 @@
-import { Modal } from "../../../types";
+import { Modal, DutyState } from "../../../types";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, GuildMember, ModalSubmitInteraction } from "discord.js";
 import { getTimeString } from "../../../utils/dutyStateHelper";
 import { endDutyState } from "../../../services/dutyStateService";
@@ -25,7 +25,8 @@ const event: Modal = {
             title = 'PKSF Duties';
         };
 
-        const dutyStateDocument = await getOneDocument(`aresDutyStates`, { threadId: interaction.channel.id });
+        const dutyStateDocument = await getOneDocument<DutyState>(`aresDutyStates`, { threadId: interaction.channel.id });
+        if (!dutyStateDocument) { return; }
 
         const dutyPicture = interaction.message.embeds[0].fields.filter(n => n.name == 'Duty Picture')[0].value;
         const tablistStarted = interaction.message.embeds[0].fields.filter(n => n.name == 'Tablist Started')[0].value;

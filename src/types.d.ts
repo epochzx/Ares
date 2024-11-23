@@ -40,12 +40,33 @@ export interface Infraction {
     active?: boolean;
 }
 
-interface DutyState {
+export interface DutyState {
     threadId: string;
     author: string;
     started: number;
     reminders?: boolean;
     ended: boolean;
+}
+
+export interface AutoResponse {
+    prompt: string,
+    response: string
+}
+
+export interface GuildLog {
+    guildId: string,
+    enabled: boolean,
+    channel: string
+}
+
+export interface GenericData {
+    name: string,
+    data: string,
+}
+
+export interface UserTimezone {
+    userId: string,
+    gmtOffset: string,
 }
 
 export type GuildOption = keyof GuildOptions;

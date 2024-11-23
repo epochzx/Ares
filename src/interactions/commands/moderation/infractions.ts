@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, ColorResolvable, User, CommandInteraction, ButtonInteraction, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'discord.js';
-import { SlashCommand } from '../../../types';
+import { SlashCommand, Infraction } from '../../../types';
 import { getPrimaryColour, pluralize, reply, splitIntoGroups } from '../../../utils/replyHelper';
 import { infractionToString } from '../../../utils/moderationHelper';
 import data from '../../../data.json';
@@ -284,7 +284,7 @@ export const command: SlashCommand = {
 
             case 'id': {
                 const idOption = interaction.options.getNumber('id');
-                const infraction = await getOneDocument(`infractions`, { time: idOption, guildId: guild.id });
+                const infraction = await getOneDocument<Infraction>(`infractions`, { time: idOption, guildId: guild.id });
 
                 if (!infraction) {
                     await reply(false, `This infraction does not exist.`, interaction);
@@ -319,7 +319,7 @@ export const command: SlashCommand = {
             case 'delete': {
                 const idOption = interaction.options.getNumber('id');
                 const reasonOption = interaction.options.getString('reason');
-                const infraction = await getOneDocument(`infractions`, { time: idOption, guildId: guild.id });
+                const infraction = await getOneDocument<Infraction>(`infractions`, { time: idOption, guildId: guild.id });
 
                 if (!infraction) {
                     await reply(false, `This infraction does not exist.`, interaction);

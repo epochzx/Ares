@@ -24,10 +24,10 @@ export const client = new Client({
 
 client.commands = new Collection<string, SlashCommand>();
 
-const handlersDir = join(__dirname, './handlers');
-const eventsHandlerPath = join(handlersDir, 'eventHandler');
-
 async function start(): Promise<void> {
+    const handlersDir = join(__dirname, './handlers');
+    const eventsHandlerPath = join(handlersDir, 'eventHandler');
+
     // load events
     const eventsHandler = await import(eventsHandlerPath);
     await eventsHandler.default(client);

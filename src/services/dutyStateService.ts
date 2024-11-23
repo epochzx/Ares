@@ -11,7 +11,7 @@ export async function beginDutyState(author: string, threadId: string, started: 
     await createDocument('aresDutyStates', doc);
 
     const timerId = setTimeout(async () => {
-        const document = await getOneDocument('aresDutyStates', { threadId: threadId });
+        const document = await getOneDocument<DutyState>('aresDutyStates', { threadId: threadId });
 
         if (!document || document.ended) {
             clearTimeout(timerId);
@@ -60,7 +60,7 @@ export async function reconcileDutyStates(): Promise<void> {
 
             const timerId = setTimeout(async () =>  {
                 const thread = client.channels.cache.get(threadId) as ThreadChannel;
-                const document = await getOneDocument('aresDutyStates', { threadId: threadId });
+                const document = await getOneDocument<DutyState>('aresDutyStates', { threadId: threadId });
 
                 if (!document || !thread) {
                     await deleteDocument('aresDutyStates', { threadId: threadId });
@@ -76,7 +76,7 @@ export async function reconcileDutyStates(): Promise<void> {
 
         } else {
             const thread = client.channels.cache.get(threadId) as ThreadChannel;
-            const document = await getOneDocument('aresDutyStates', { threadId: threadId });
+            const document = await getOneDocument<DutyState>('aresDutyStates', { threadId: threadId });
 
             if (!thread) { 
                 await deleteDocument('aresDutyStates', { threadId: threadId });

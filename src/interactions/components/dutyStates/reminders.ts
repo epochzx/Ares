@@ -1,5 +1,5 @@
 import { getOneDocument, updateDocument } from "../../../services/dbService";
-import { Component } from "../../../types";
+import { Component, DutyState } from "../../../types";
 import { ActionRowBuilder, ButtonInteraction, ButtonBuilder, ButtonStyle, ButtonComponent, GuildMember } from "discord.js";
 import { handleError } from "../../../utils/errorHandler";
 import { reply } from "../../../utils/replyHelper";
@@ -12,7 +12,7 @@ const event: Component = {
         if (!interaction.member) { return; }
         if (!interaction.channel) { return; }
         
-        const document = await getOneDocument(`aresDutyStates`, { threadId: interaction.channel.id });
+        const document = await getOneDocument<DutyState>(`aresDutyStates`, { threadId: interaction.channel.id });
         if (!document) { return; }
 
         try {

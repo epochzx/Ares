@@ -1,5 +1,5 @@
 import { Events, Message, TextChannel } from 'discord.js';
-import { BotEvent } from '../../types';
+import { BotEvent, GuildLog } from '../../types';
 import { client } from '../../index';
 import { getOneDocument } from '../../services/dbService';
 import { logDeletedMessage } from '../../services/loggingService';
@@ -18,7 +18,7 @@ const event: BotEvent = {
             return;
         } 
 
-        const messageLogs = await getOneDocument(`messageLogs`, { guildId: message.guild?.id });
+        const messageLogs = await getOneDocument<GuildLog>(`messageLogs`, { guildId: message.guild?.id });
         if (!messageLogs) { return; }
         
         const logChannel = client.channels.cache.get(messageLogs.channel);

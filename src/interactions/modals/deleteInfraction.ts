@@ -1,4 +1,4 @@
-import { Modal } from "../../types";
+import { Modal, Infraction } from "../../types";
 import { ColorResolvable, EmbedBuilder, ModalSubmitInteraction } from "discord.js";
 import { getPrimaryColour, reply } from "../../utils/replyHelper";
 import { deleteDocument, getOneDocument } from "../../services/dbService";
@@ -22,7 +22,7 @@ const event: Modal = {
         if (!embed) { return; };
 
         const infractionId = embed.title?.replace(/\D/g, '');
-        const infraction = await getOneDocument(`infractions`, { time: parseInt(infractionId as string), guildId: guild.id });
+        const infraction = await getOneDocument<Infraction>(`infractions`, { time: parseInt(infractionId as string), guildId: guild.id });
 
         if (!infraction) {
             await reply(false, `This infraction does not exist.`, interaction, undefined, false, false);

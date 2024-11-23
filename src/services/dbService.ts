@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { handleError} from '../utils/errorHandler';
-import { MongoClient } from 'mongodb';
+import { MongoClient, Document, WithId } from 'mongodb';
 import settings from '../settings.json';
 
 let mongoClient: MongoClient | null = null;
@@ -25,14 +25,14 @@ export async function getDocuments(collectionName: string, query: object, sort?:
     }
 }
 
-export async function getOneDocument(collectionName: string, query: object): Promise<any> {
+export async function getOneDocument<T extends Document>(collectionName: string, query: object): Promise<WithId<T> | null> {
     try {
         const mongoClient = await getMongoClient();
 
-        if (!mongoClient) { return; }
+        if (!mongoClient) { return null; }
         const db = mongoClient.db('main');
 
-        const collection = db.collection(collectionName);
+        const collection = db.collection<T>(collectionName);
         return await collection.findOne(query);
     } catch (error) {
         await handleError(error as Error, `Error getting data from  database`);

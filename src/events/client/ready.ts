@@ -4,14 +4,14 @@ import { BotEvent } from '../../types';
 import data from '../../data.json';
 import { reconcileDutyStates } from '../../services/dutyStateService';
 import { getPrimaryColour } from '../../utils/replyHelper';
-import { memoryUsage } from 'process';
+import { env, memoryUsage } from 'process';
 import settings from '../../settings.json';
 
 const event: BotEvent = {
     name: 'ready',
     once: true,
     guild: false,
-
+    
     execute: async (client: Client) => {
         console.log('✅  Bot online');
         
@@ -20,8 +20,10 @@ const event: BotEvent = {
             status: PresenceUpdateStatus.DoNotDisturb,
         });
 
-        if (process.env.environment) {
-            if (process.env.environment == 'PROD') {
+        const environment = process.env.environment;
+
+        switch (environment) {
+            case 'PROD': {
                 if (settings.loadExistingDutyStates) {
                     await reconcileDutyStates();
                 } else {
@@ -40,16 +42,24 @@ const event: BotEvent = {
 
                 const restartedMessage = await processLogs.send({ embeds: [restartedEmbed] });
                 await restartedMessage.crosspost();
-            } else 
 
-            if (process.env.environment == 'DEV') {
+                break;
+            }
+
+            case 'DEV': {
                 const memory = Math.floor(memoryUsage.rss() / 1000000);
                 console.log(memory);
 
                 setInterval(() => {
                     const memory = Math.floor(memoryUsage.rss() / 1000000);
                     console.log(memory);
-                }, 1800000);
+                }, 1800);
+
+                break;
+            }
+
+            default: {
+                return;
             }
         }
 

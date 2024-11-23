@@ -4,6 +4,7 @@ import data from '../data.json';
 import { handleError } from "./errorHandler";
 import { client } from '../index';
 import { ThreadChannel } from 'discord.js';
+import { UserTimezone, DutyState } from '../types';
 
 export async function getTimeString(userId: string): Promise<string> {
     function getTime(offset: number) {
@@ -20,18 +21,19 @@ export async function getTimeString(userId: string): Promise<string> {
         return `${hours}:${minutes}`;
     }
     
-    const userTimezone = await getOneDocument(`timezones`, {userId: userId});
+    const userTimezone = await getOneDocument<UserTimezone>(`timezones`, {userId: userId});
+    if (!userTimezone) { return 'GMT'; }
     
     let offset;
     let suffix;
     
     if (Object.is(userTimezone, null)) {
-        offset = 0;
+        offset = '0';
     } else {
         offset = userTimezone['gmtOffset'];
     }
     
-    if (offset == 0) {
+    if (offset == '0') {
         suffix = 'GMT';
     } else {
         if (!offset.startsWith('-')) {
@@ -41,7 +43,7 @@ export async function getTimeString(userId: string): Promise<string> {
         }
     }
 
-    return `${getTime(offset)} ${suffix}`;
+    return `${getTime(parseInt(offset))} ${suffix}`;
 }
 
 export async function getDivision(username: string): Promise<string> {
@@ -91,7 +93,7 @@ export async function sendReminder(threadId: string, author: string, message: st
 export function startReminderInterval(threadId: string, author: string): NodeJS.Timeout {
     const intervalId = setInterval(async () => {
 
-        const document = await getOneDocument('aresDutyStates', { threadId });
+        const document = await getOneDocument<DutyState>('aresDutyStates', { threadId });
         const dutyStateThread = client.channels.cache.get(threadId) as ThreadChannel;
 
         if (!document || !dutyStateThread || document.ended) {

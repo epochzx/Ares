@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, CommandInteraction, User, MessageComponentInteraction } from 'discord.js';
-import { SlashCommand } from '../../../types';
+import { SlashCommand, AutoResponse } from '../../../types';
 import { getPrimaryColour, pluralize, reply, splitIntoGroups } from '../../../utils/replyHelper';
 import { createDocument, deleteDocument, getDocuments, getOneDocument } from '../../../services/dbService';
 import { pagination, ButtonTypes, ButtonStyles } from '@devraelfreeze/discordjs-pagination';
@@ -60,7 +60,7 @@ export const command: SlashCommand = {
                 let data;
 
                 try {
-                    data = await getOneDocument(`autoResponses`, {prompt: prompt});
+                    data = await getOneDocument<AutoResponse>(`autoResponses`, {prompt: prompt});
                 } catch (error) {
                     reply(false, error as string, interaction);
 
@@ -169,7 +169,7 @@ export const command: SlashCommand = {
                 let data;
 
                 try {
-                    data = await getOneDocument(`autoResponses`, {prompt: prompt});
+                    data = await getOneDocument<AutoResponse>(`autoResponses`, {prompt: prompt});
                 } catch (error) {
                     reply(false, error as string, interaction);
 

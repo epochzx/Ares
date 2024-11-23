@@ -29,7 +29,6 @@ export default async function loadCronJobs(): Promise<void> {
         }
     }
 
-
     if (loadedCount == 0) {
         console.log(`❌  0 cron jobs to load`);
     }

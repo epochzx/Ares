@@ -1,5 +1,5 @@
 import { createDocument, getOneDocument, updateDocument } from "../../../services/dbService";
-import { Component } from "../../../types";
+import { Component, UserTimezone } from "../../../types";
 import { StringSelectMenuInteraction } from "discord.js";
 import { reply } from "../../../utils/replyHelper";
 import { handleError } from "../../../utils/errorHandler";
@@ -20,7 +20,7 @@ const event: Component = {
             selectedTimezone = selectedTimezone.slice(1);
         }
 
-        const userTimezone = await getOneDocument(`timezones`, { userId: interaction.member.user.id });
+        const userTimezone = await getOneDocument<UserTimezone>(`timezones`, { userId: interaction.member.user.id });
 
         if (!userTimezone) {
             const doc = {
