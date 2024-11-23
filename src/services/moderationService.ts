@@ -1,3 +1,4 @@
+import { Infraction } from '../types';
 import { handleError } from '../utils/errorHandler';
 import { createDocument, getDocuments, updateDocument } from './dbService';
 
@@ -45,7 +46,7 @@ export async function createAudit(targetId: string, moderatorId: string, guildId
 }
 
 export async function handleUnban(targetId: string): Promise<void> {
-    const userInfractions = await getDocuments(`infractions`, { userId: targetId, action: 'Ban', active: true });
+    const userInfractions = await getDocuments<Infraction>(`infractions`, { userId: targetId, action: 'Ban', active: true });
 
     for (const document of userInfractions) {
          try {

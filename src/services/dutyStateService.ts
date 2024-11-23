@@ -31,7 +31,7 @@ export async function endDutyState(threadId: string): Promise<void> {
 }
 
 export async function reconcileDutyStates(): Promise<void> {
-    const activeDutyStates = await getDocuments('aresDutyStates', {});
+    const activeDutyStates = await getDocuments<DutyState>('aresDutyStates', {});
 
     if (!activeDutyStates.length) {
         console.log('   No active duty states');

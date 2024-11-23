@@ -1,18 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { handleError} from '../utils/errorHandler';
 import { MongoClient, Document, WithId } from 'mongodb';
 import settings from '../settings.json';
 
 let mongoClient: MongoClient | null = null;
 
-export async function getDocuments(collectionName: string, query: object, sort?: object): Promise<any> {
+export async function getDocuments<T extends Document>(collectionName: string, query: object, sort?: object): Promise<WithId<T>[]> {
     try {
         const mongoClient = await getMongoClient();
 
-        if (!mongoClient) { return null; }
-        const db = mongoClient.db('main');
+        if (!mongoClient) {
+            return [];
+        }
 
-        const collection = db.collection(collectionName);
+        const db = mongoClient.db('main');
+        const collection = db.collection<T>(collectionName);
 
         if (!sort) {
             return await collection.find(query).toArray();

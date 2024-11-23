@@ -137,7 +137,7 @@ export const command: SlashCommand = {
             case 'view': {
                 if (!targetOption) { return; }
 
-                const infractions = await getDocuments(`infractions`, { userId: targetOption.id, guildId: guild.id }, { sort: { time: -1 } });
+                const infractions = await getDocuments<Infraction>(`infractions`, { userId: targetOption.id, guildId: guild.id }, { sort: { time: -1 } });
 
                 if (infractions.length == 0) {
                     await reply(true, `<@${targetOption.id}> has no infractions.`, interaction);
@@ -210,7 +210,7 @@ export const command: SlashCommand = {
             }
 
             case 'all': {
-                const infractions = await getDocuments(`infractions`, { guildId: guild.id }, { sort: { time: -1 } });
+                const infractions = await getDocuments<Infraction>(`infractions`, { guildId: guild.id }, { sort: { time: -1 } });
 
                 if (infractions.length == 0) {
                     await reply(true, `There are no active infractions.`, interaction);
@@ -372,7 +372,7 @@ export const command: SlashCommand = {
                 const reasonOption = interaction.options.getString('reason');
                 if (!targetOption) { return; }
 
-                const infractions = await getDocuments(`infractions`, { userId: targetOption.id, guildId: guild.id }, { sort: { time: -1 } });
+                const infractions = await getDocuments<Infraction>(`infractions`, { userId: targetOption.id, guildId: guild.id }, { sort: { time: -1 } });
 
                 if (infractions.length == 0) {
                     await reply(true, `<@${targetOption.id}> has no infractions.`, interaction);

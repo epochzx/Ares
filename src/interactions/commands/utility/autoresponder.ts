@@ -97,7 +97,7 @@ export const command: SlashCommand = {
                 let databaseData;
 
                 try {
-                    databaseData = await getDocuments(`autoResponses`, {});
+                    databaseData = await getDocuments<AutoResponse>(`autoResponses`, {});
                 } catch (error) {
                     reply(false, error as string, interaction);
 

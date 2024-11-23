@@ -2,7 +2,7 @@ import { getDocuments, getOneDocument } from '../services/dbService';
 import { CommandInteraction, EmbedBuilder, ButtonBuilder, Message, ActionRowBuilder, ButtonInteraction, ColorResolvable, ModalSubmitInteraction, StringSelectMenuInteraction } from 'discord.js';
 import data from '../data.json';
 import { handleError } from './errorHandler';
-import { GenericData } from '../types';
+import { AutoResponse, GenericData } from '../types';
 
 export async function reply(state: boolean, text: string, interaction: CommandInteraction | ButtonInteraction | ModalSubmitInteraction | StringSelectMenuInteraction, actionRow?: ActionRowBuilder<ButtonBuilder>, deferred?: boolean, ephemeral?: boolean): Promise<void> {
     try {
@@ -54,7 +54,7 @@ export function splitIntoGroups(array: Array<string>, groups: number): string[][
 }
 
 export async function getAutoResponse(message: string): Promise<boolean | string> {
-    const documents = await getDocuments(`autoResponses`, {});
+    const documents = await getDocuments<AutoResponse>(`autoResponses`, {});
 
     for (const autoResponse of documents) {
         if (message.toLowerCase().includes(autoResponse['prompt'].toLowerCase())) {
