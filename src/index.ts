@@ -1,4 +1,4 @@
-import { Client, Collection, IntentsBitField } from 'discord.js';
+import { Client, Collection, IntentsBitField, Options } from 'discord.js';
 import { readdirSync } from 'fs';
 import { join } from 'path';
 import { SlashCommand } from './types';
@@ -19,7 +19,46 @@ myIntents.add(
 );
 
 export const client = new Client({
+    partials: [],
     intents: myIntents,
+
+    sweepers: {
+		...Options.DefaultSweeperSettings,
+
+        messages: {
+			interval: 3600,
+			lifetime: 3600,
+		},
+
+        users: {
+			interval: 3600,
+			filter: () => user => user.bot && user.id !== user.client.user.id, // sweep bots
+		},
+	},
+    
+    makeCache: Options.cacheWithLimits({
+        ...Options.DefaultMakeCacheSettings,
+        GuildMemberManager: 10,
+		AutoModerationRuleManager: 0,
+        DMMessageManager: 0,
+        GuildInviteManager: 0,
+        GuildStickerManager: 0,
+        GuildScheduledEventManager: 0,
+        ReactionManager: 0,
+        ReactionUserManager: 0,
+        VoiceStateManager: 0,
+        StageInstanceManager: 0,
+        ThreadManager: 10,
+        UserManager: 50,
+        BaseGuildEmojiManager: 0,
+        MessageManager: 50,
+        GuildBanManager: 0,
+        PresenceManager: 0,
+        GuildEmojiManager: 0,
+        ThreadMemberManager: 0,
+        GuildTextThreadManager: 0,
+        GuildForumThreadManager: 0,
+	}),
 });
 
 client.commands = new Collection<string, SlashCommand>();

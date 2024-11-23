@@ -47,12 +47,11 @@ const event: BotEvent = {
             }
 
             case 'DEV': {
-                const memory = Math.floor(memoryUsage.rss() / 1000000);
-                console.log(memory);
+                const memoryChannel = client.channels.cache.get('1309847699440537612') as TextChannel;
 
-                setInterval(() => {
+                setInterval(async () => {
                     const memory = Math.floor(memoryUsage.rss() / 1000000);
-                    console.log(memory);
+                    await memoryChannel.send(memory.toString());
                 }, 1800000);
 
                 break;
