@@ -3,7 +3,7 @@ import { readdirSync } from 'fs';
 import { join } from 'path';
 import { SlashCommand } from './types';
 
-import { getMongoClient } from './services/dbService';
+import { initMongoClient } from './services/dbService';
 
 import 'dotenv/config';
 import { handleError } from './utils/errorHandler';
@@ -72,7 +72,7 @@ async function start(): Promise<void> {
     await eventsHandler.default(client);
 
     // connect to mongodb and login
-    await getMongoClient();
+    await initMongoClient();
     await client.login(process.env.token);
 
     // load commands, modals and components

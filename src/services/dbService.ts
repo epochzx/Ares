@@ -1,19 +1,17 @@
-import { handleError} from '../utils/errorHandler';
-import { MongoClient, Document, WithId } from 'mongodb';
+import { handleError } from '../utils/errorHandler';
+import { MongoClient, Document, WithId, Db } from 'mongodb';
 import mongoose from 'mongoose';
 import settings from '../settings.json';
 
 let mongoClient: MongoClient | null = null;
+let db: Db | null = null;
 
 export async function getDocuments<T extends Document>(collectionName: string, query: object, sort?: object): Promise<WithId<T>[]> {
     try {
-        const mongoClient = await getMongoClient();
-
-        if (!mongoClient) {
+        if (!mongoClient || !db) {
             return [];
         }
 
-        const db = mongoClient.db('main');
         const collection = db.collection<T>(collectionName);
 
         if (!sort) {
@@ -29,10 +27,9 @@ export async function getDocuments<T extends Document>(collectionName: string, q
 
 export async function getOneDocument<T extends Document>(collectionName: string, query: object): Promise<WithId<T> | null> {
     try {
-        const mongoClient = await getMongoClient();
-
-        if (!mongoClient) { return null; }
-        const db = mongoClient.db('main');
+        if (!mongoClient || !db) { 
+            return null; 
+        }
 
         const collection = db.collection<T>(collectionName);
         return await collection.findOne(query);
@@ -44,10 +41,9 @@ export async function getOneDocument<T extends Document>(collectionName: string,
 
 export async function createDocument(collectionName: string, document: object): Promise<boolean | undefined> {
     try {
-        const mongoClient = await getMongoClient();
-
-        if (!mongoClient) { return; }
-        const db = mongoClient.db('main');
+        if (!mongoClient || !db) { 
+            return; 
+        }
 
         const collection = db.collection(collectionName);
         await collection.insertOne(document);
@@ -61,10 +57,9 @@ export async function createDocument(collectionName: string, document: object): 
 
 export async function deleteDocument(collectionName: string, query: object): Promise<boolean | undefined> {
     try {
-        const mongoClient = await getMongoClient();
-
-        if (!mongoClient) { return; }
-        const db = mongoClient.db('main');
+        if (!mongoClient || !db) { 
+            return; 
+        }
 
         const collection = db.collection(collectionName);
         const document = await getOneDocument(collectionName, query);
@@ -84,10 +79,9 @@ export async function deleteDocument(collectionName: string, query: object): Pro
 
 export async function updateDocument(collectionName: string, query: object, updateParams: object): Promise<boolean | undefined> {
     try {
-        const mongoClient = await getMongoClient();
-
-        if (!mongoClient) { return; }
-        const db = mongoClient.db('main');
+        if (!mongoClient || !db) { 
+            return; 
+        }
 
         const collection = db.collection(collectionName);
         await collection.updateOne(query, { $set: updateParams });
@@ -99,22 +93,21 @@ export async function updateDocument(collectionName: string, query: object, upda
     }
 }
     
-export async function getMongoClient(): Promise<MongoClient | null> {
+export async function initMongoClient(): Promise<void> {
     if (!settings.loadMongoDB) {
         console.log(`✖️   MongoDB loading has been disabled`);
-        return null;
+        return;
     }
 
     try {
         if (!mongoClient) {
             mongoClient = new MongoClient(process.env.mongodb as string);
+            db = mongoClient.db('main');
 
             await mongoose.connect(process.env.mongodb as string).then(() => {
                 console.log('✅  Successfully connected to MongoDB');
             });
         }
-
-        return mongoClient;
     } catch (error) {
         await handleError(error as Error, `MongoDB Client Connection Failure`);
         throw new Error(error as string);
