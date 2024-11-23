@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Client, Collection, IntentsBitField } from 'discord.js';
 import { readdirSync } from 'fs';
 import { join } from 'path';
 import { SlashCommand } from './types';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { getMongoClient } from './services/dbService';
 
 import 'dotenv/config';
@@ -38,14 +38,14 @@ async function start() {
     await client.login(process.env.token);
 
     // load commands, modals and components
-    readdirSync(handlersDir).forEach(async (handler) => {
+    /*readdirSync(handlersDir).forEach(async (handler) => {
         if (handler == 'eventHandler.ts' || handler == 'eventHandler.js') { return; };
 
         const handlerPath = join(handlersDir, handler);
         const handlerModule = await import(handlerPath);
     
         handlerModule.default(client, client.commands);
-    });
+    });*/
 }
 
 start();

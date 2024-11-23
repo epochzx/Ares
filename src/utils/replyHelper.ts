@@ -44,7 +44,7 @@ export function pluralize(value: number, unit: string): string {
     return value === 1 ? `${value} ${unit}` : `${value} ${unit}s`;
 }
 
-export function splitIntoGroups(array: Array<string>, groups: number) {
+export function splitIntoGroups(array: Array<string>, groups: number): string[][] {
     const result = [];
     for (let i = 0; i < array.length; i += groups) {
         result.push(array.slice(i, i + groups));

@@ -5,7 +5,7 @@ import { BotEvent } from '../types';
 import getFiles from '../utils/fileHelper';
 import { pluralize } from '../utils/replyHelper';
 
-export default async function loadEvents(client: Client) {
+export default async function loadEvents(client: Client): Promise<void> {
     const eventsDir = join(__dirname, '../events');
     const eventFiles = getFiles(eventsDir);
 

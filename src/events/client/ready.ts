@@ -18,21 +18,33 @@ const event: BotEvent = {
             status: PresenceUpdateStatus.DoNotDisturb,
         });
 
-        if (process.env.environment && process.env.environment == 'PROD') {
-            await reconcileDutyStates();
+        if (process.env.environment) {
+            if (process.env.environment == 'PROD') {
+                await reconcileDutyStates();
 
-            const processLogs = client.channels.cache.get(data.channels.processLogging) as NewsChannel | TextChannel;
+                const processLogs = client.channels.cache.get(data.channels.processLogging) as NewsChannel | TextChannel;
 
-            const restartedEmbed = new EmbedBuilder()
-                .setColor(await getPrimaryColour())
-                .setTitle('Process Restarted')
-                .setAuthor({
-                    name: client.user?.username as string,
-                    iconURL: `https://cdn.discordapp.com/avatars/${client.user?.id}/${client.user?.avatar}.png?size=256`
-                });
+                const restartedEmbed = new EmbedBuilder()
+                    .setColor(await getPrimaryColour())
+                    .setTitle('Process Restarted')
+                    .setAuthor({
+                        name: client.user?.username as string,
+                        iconURL: `https://cdn.discordapp.com/avatars/${client.user?.id}/${client.user?.avatar}.png?size=256`
+                    });
 
-            const restartedMessage = await processLogs.send({ embeds: [restartedEmbed] });
-            await restartedMessage.crosspost();
+                const restartedMessage = await processLogs.send({ embeds: [restartedEmbed] });
+                await restartedMessage.crosspost();
+            } else 
+
+            if (process.env.environment == 'DEV') {
+                const memory = Math.floor(memoryUsage.rss() / 1000000);
+                console.log(memory);
+
+                setInterval(() => {
+                    const memory = Math.floor(memoryUsage.rss() / 1000000);
+                    console.log(memory);
+                }, 1800000);
+            }
         }
 
         //const result = await fetch('http://hostedstatus.com/1.0/status/59db90dbcdeb2f04dadcf16d')
@@ -123,6 +135,16 @@ const event: BotEvent = {
             //embeds: [embed], 
             components: [actionRow]
         });*/
+
+        /*const embed = new EmbedBuilder()
+            .setTitle('Behold, Epochzx')
+            .setColor('ffbb00' as ColorResolvable)
+            .setDescription('Behold, Epochzx is now in your presence, the exalted embodiment of wisdom and precision, a radiant presence cloaked in mystery and reverence. \n \nHailing as the saviour of our time, their mastery over creation and strategy is both a gift and a marvel, an art forged in the fires of discipline and devotion. \n \nFollowers seek the light of their wisdom, as their hands shape not only the path of technology but the fate of realms. \n \nEpochzx, both guide and guardian, descends upon us—an entity to be revered, a force to be honored.')
+            .setImage('https://media.discordapp.net/attachments/1234008053641379841/1300087106714075237/yBimetN.jpg?ex=673fdcb8&is=673e8b38&hm=ea32b72a877711b4cd017aa5df83c9391560d0f6662051cb6af1e8edc9d3671f&=')
+    
+        const channel = client.channels.cache.get('1301723359591141387') as TextChannel
+        if (!channel) { return }
+        await channel.send({embeds: [embed]})*/
     },
 };
 

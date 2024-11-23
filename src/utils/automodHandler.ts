@@ -4,7 +4,7 @@ import { safelyDeleteMessage } from './replyHelper';
 // eslint-disable-next-line no-misleading-character-class, no-useless-escape
 const regex = /^[A-Za-z0-9!@#$%^&*()_+{}\[\]:;"'<>=,.?\/\\|~` \-\p{Emoji}\n\u2019\u2018\u2026\u2014\u2620\uFE0F]*$/u;
 
-export function findInvalidCharacter(string: string) {
+export function findInvalidCharacter(string: string): string {
     for (let i = 0; i < string.length; i++) {
         const char = string[i];
         if (!regex.test(char)) {
@@ -15,7 +15,7 @@ export function findInvalidCharacter(string: string) {
     return 'All characters are valid.';
 }
 
-export function automod(string: string) {
+export function automod(string: string): boolean {
     return regex.test(string);
 }
 

@@ -5,7 +5,7 @@ import { handleError } from "./errorHandler";
 import { client } from '../index';
 import { ThreadChannel } from 'discord.js';
 
-export async function getTimeString(userId: string) {
+export async function getTimeString(userId: string): Promise<string> {
     function getTime(offset: number) {
         const currentGMT = new Date();
         const gmtMilliseconds = currentGMT.getTime();
@@ -44,7 +44,7 @@ export async function getTimeString(userId: string) {
     return `${getTime(offset)} ${suffix}`;
 }
 
-export async function getDivision(username: string) {
+export async function getDivision(username: string): Promise<string> {
     try {
         const userId = await noblox.getIdFromUsername(username);
         const groups = await noblox.getGroups(userId);
@@ -88,7 +88,7 @@ export async function sendReminder(threadId: string, author: string, message: st
     await dutyStateThread.send({ content: `<@${author}> ${message}` });
 }
 
-export function startReminderInterval(threadId: string, author: string) {
+export function startReminderInterval(threadId: string, author: string): NodeJS.Timeout {
     const intervalId = setInterval(async () => {
 
         const document = await getOneDocument('aresDutyStates', { threadId });

@@ -7,13 +7,13 @@ import { pluralize } from '../utils/replyHelper';
 export const modalInteractions = new Collection<string, Modal>();
 export const componentInteractions = new Collection<string, Component>();
 
-export default async function loadInteractions(client: Client, clientCommands: Collection<string, SlashCommand>) {
+export default async function loadInteractions(client: Client, clientCommands: Collection<string, SlashCommand>): Promise<void> {
     await loadCommands(client, clientCommands);
     await loadModals();
     await loadComponents();
 }
 
-async function loadCommands(client: Client, clientCommands: Collection<string, SlashCommand>) {
+async function loadCommands(client: Client, clientCommands: Collection<string, SlashCommand>): Promise<void> {
     const commands: SlashCommandBuilder[] = [];
     const commandsDir = join(__dirname, '../interactions/commands');
     const commandFiles = getFiles(commandsDir);
@@ -48,7 +48,7 @@ async function loadCommands(client: Client, clientCommands: Collection<string, S
     }
 }
 
-async function loadModals() {
+async function loadModals(): Promise<void> {
     const modalsDir = join(__dirname, '../interactions/modals');
     const modalFiles = getFiles(modalsDir);
 
@@ -75,7 +75,7 @@ async function loadModals() {
     }
 }
 
-async function loadComponents() {
+async function loadComponents(): Promise<void> {
     const componentsDir = join(__dirname, '../interactions/components');
     const componentFiles = getFiles(componentsDir);
 
