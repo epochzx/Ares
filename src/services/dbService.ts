@@ -40,7 +40,7 @@ export async function getOneDocument<T extends Document>(collectionName: string,
     }
 }
 
-export async function createDocument(collectionName: string, document: object): Promise<any> {
+export async function createDocument(collectionName: string, document: object): Promise<boolean | undefined> {
     try {
         const mongoClient = await getMongoClient();
 
@@ -57,7 +57,7 @@ export async function createDocument(collectionName: string, document: object): 
     }
 }
 
-export async function deleteDocument(collectionName: string, query: object): Promise<any> {
+export async function deleteDocument(collectionName: string, query: object): Promise<boolean | undefined> {
     try {
         const mongoClient = await getMongoClient();
 
@@ -80,7 +80,7 @@ export async function deleteDocument(collectionName: string, query: object): Pro
     }
 }
 
-export async function updateDocument(collectionName: string, query: object, updateParams: object): Promise<any> {
+export async function updateDocument(collectionName: string, query: object, updateParams: object): Promise<boolean | undefined> {
     try {
         const mongoClient = await getMongoClient();
 
