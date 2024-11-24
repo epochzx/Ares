@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Client, ActivityType, PresenceUpdateStatus, TextChannel, EmbedBuilder, NewsChannel, ColorResolvable, ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder, MediaChannel } from 'discord.js';
-import { BotEvent } from '../../types';
+import { BotEvent, StatusResponse } from '../../types';
 import data from '../../data.json';
 import { reconcileDutyStates } from '../../services/dutyStateService';
 import { getPrimaryColour } from '../../utils/replyHelper';
 import { env, memoryUsage } from 'process';
 import settings from '../../settings.json';
+import axios from 'axios';
+import { statusServiceInit } from '../../services/robloxStatusService';
 
 const event: BotEvent = {
     name: 'ready',
@@ -60,10 +62,9 @@ const event: BotEvent = {
             default: {
                 return;
             }
+            
         }
 
-        //const result = await fetch('http://hostedstatus.com/1.0/status/59db90dbcdeb2f04dadcf16d')
-        
        // const channel = client.channels.cache.get('1301723359591141387') as TextChannel;
         //const message = await channel.messages.fetch('1301736270955024465')
 

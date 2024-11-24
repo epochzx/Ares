@@ -69,6 +69,22 @@ export interface UserTimezone {
     gmtOffset: string,
 }
 
+export interface StatusResponse {
+    result: {
+        status_overall: {
+            updated: string;
+            status: string;
+            status_code: number;
+        };
+        status: object[];
+        incidents: object[];
+        maintenance: {
+            active: object[];
+            upcoming: object[];
+        };
+    };
+}
+
 declare module 'discord.js' {
     export interface Client {
         commands: Collection<string, SlashCommand>;

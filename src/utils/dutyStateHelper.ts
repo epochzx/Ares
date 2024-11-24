@@ -5,6 +5,7 @@ import { handleError } from "./errorHandler";
 import { client } from '../index';
 import { ThreadChannel } from 'discord.js';
 import { UserTimezone, DutyState } from '../types';
+import { robloxStatus } from "../services/robloxStatusService";
 
 export async function getTimeString(userId: string): Promise<string> {
     function getTime(offset: number) {
@@ -47,6 +48,10 @@ export async function getTimeString(userId: string): Promise<string> {
 }
 
 export async function getDivision(username: string): Promise<string> {
+    if (!robloxStatus) {
+        return `Guarding the border`;
+    }
+
     try {
         const userId = await noblox.getIdFromUsername(username);
         const groups = await noblox.getGroups(userId);

@@ -1,13 +1,18 @@
 {
   "images": {
-    "ares": "https://imgur.com/6E6rF0Y.png"
+    "ares": "https://imgur.com/6E6rF0Y.png",
+    "checkmark": "https://imgur.com/ekUQrlh.png",
+    "error": "https://imgur.com/VJ8UysK.png"
   },
   
   "channels": {
     "releaseLogging": "1280463342947008544",
     "processLogging": "1282908088189583461",
     "errorLogging": "1280463471489847326",
-    "interactionLogging": "1218156443635552326"
+    "interactionLogging": "1218156443635552326",
+
+    "robloxStatus": "1310055462007214100",
+    "robloxStatusMessage": "1310055591271731230"
   },
 
   "colours": {
