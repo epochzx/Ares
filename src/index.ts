@@ -3,7 +3,7 @@ import { readdirSync } from 'fs';
 import { join } from 'path';
 import { SlashCommand } from './types';
 
-import { initMongoClient, mongoClient } from './services/dbService';
+import { initMongoClient } from './services/dbService';
 
 import 'dotenv/config';
 import { handleError } from './utils/errorHandler';
@@ -99,13 +99,4 @@ process.on('unhandledRejection', async error => {
     console.log(error);
 
     return;
-});
-
-[`exit`, `SIGINT`, `SIGUSR1`, `SIGUSR2`, `uncaughtException`, `SIGTERM`].forEach((eventType) => {
-    process.on(eventType, async () => {
-        if (mongoClient) {
-            await mongoClient.close();
-            console.log('❌  MongoDB connection closed');
-        };
-    });
 });

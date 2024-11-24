@@ -3,7 +3,7 @@ import { MongoClient, Document, WithId, Db } from 'mongodb';
 import mongoose from 'mongoose';
 import settings from '../settings.json';
 
-export let mongoClient: MongoClient | null = null;
+let mongoClient: MongoClient | null = null;
 let db: Db | null = null;
 
 export async function getDocuments<T extends Document>(collectionName: string, query: object, sort?: object): Promise<WithId<T>[]> {
