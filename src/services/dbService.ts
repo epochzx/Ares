@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { handleError } from '../utils/errorHandler';
 import { MongoClient, Document, WithId, Db } from 'mongodb';
 import settings from '../settings.json';
@@ -5,62 +6,52 @@ import settings from '../settings.json';
 let mongoClient: MongoClient | null = null;
 let db: Db | null = null;
 
-export async function getDocuments<T extends Document>(collectionName: string, query: object, sort?: object): Promise<WithId<T>[]> {
-    try {
+async function handleDatabaseOperation<T>(operation: () => Promise<T>, force?: boolean): Promise<T> {
+    if (!force) {
         if (!mongoClient || !db) {
-            throw new Error(`MongoClient or DB missing`);
+            throw new Error('MongoClient or DB not initialised');
         }
+    }
 
-        const collection = db.collection<T>(collectionName);
+    try {
+        return await operation();
+    } catch (error) {
+        await handleError(error as Error, `Database operation failed`);
+        throw new Error('Database operation failed');
+    }
+}
+
+export async function getDocuments<T extends Document>(collectionName: string, query: object, sort?: object): Promise<WithId<T>[]> {
+    return await handleDatabaseOperation(async () => {
+        const collection = db!.collection<T>(collectionName);
 
         if (!sort) {
             return await collection.find(query).toArray();
         } else {
             return await collection.find(query, sort).toArray();
         }
-    } catch (error) {
-        await handleError(error as Error, `Error getting data from database`);
-        throw new Error(`Failed to get data from the database: ${error}`);
-    }
+    });
 }
 
 export async function getOneDocument<T extends Document>(collectionName: string, query: object): Promise<WithId<T> | null> {
-    try {
-        if (!mongoClient || !db) { 
-            throw new Error(`MongoClient or DB missing`);
-        }
-
-        const collection = db.collection<T>(collectionName);
-        return await collection.findOne(query);
-    } catch (error) {
-        await handleError(error as Error, `Error getting data from database`);
-        throw new Error(`Failed to get data from the database: ${error}`);
-    }
+    return await handleDatabaseOperation(() => {
+        const collection = db!.collection<T>(collectionName);
+        return collection.findOne(query);
+    });
 }
 
 export async function createDocument(collectionName: string, document: object): Promise<boolean> {
-    try {
-        if (!mongoClient || !db) { 
-            throw new Error(`MongoClient or DB missing`);
-        }
-
-        const collection = db.collection(collectionName);
+    return await handleDatabaseOperation(async () => {
+        const collection = db!.collection(collectionName);
         await collection.insertOne(document);
 
         return true;
-    } catch (error) {
-        await handleError(error as Error, `Error writing data to the database`);
-        throw new Error(`Failed to write data to the database: ${error}`);
-    }
+    });
 }
 
 export async function deleteDocument(collectionName: string, query: object): Promise<boolean | undefined> {
-    try {
-        if (!mongoClient || !db) { 
-            throw new Error(`MongoClient or DB missing`); 
-        }
-
-        const collection = db.collection(collectionName);
+    return await handleDatabaseOperation(async () => {
+        const collection = db!.collection(collectionName);
         const document = await getOneDocument(collectionName, query);
 
         if (document == null) {
@@ -70,14 +61,11 @@ export async function deleteDocument(collectionName: string, query: object): Pro
         await collection.deleteOne(query);
 
         return true;
-    } catch (error) {
-        await handleError(error as Error, `Error writing data to the database`);
-        throw new Error(`Failed to write data to the database: ${error}`);
-    }
+    });
 }
 
 export async function updateDocument(collectionName: string, query: object, updateParams: object): Promise<boolean> {
-    try {
+    return await handleDatabaseOperation(async () => { 
         if (!mongoClient || !db) { 
             throw new Error(`MongoClient or DB missing`);
         }
@@ -86,10 +74,7 @@ export async function updateDocument(collectionName: string, query: object, upda
         await collection.updateOne(query, { $set: updateParams });
 
         return true;
-    } catch (error) {
-        await handleError(error as Error, `Error writing data to the database`);
-        throw new Error(`Failed to write data to the database: ${error}`);
-    }
+    });
 }
     
 export async function initMongoClient(): Promise<void> {
@@ -98,13 +83,21 @@ export async function initMongoClient(): Promise<void> {
         return;
     }
 
-    try {
+    return await handleDatabaseOperation(async () => {
         if (!mongoClient) {
             mongoClient = new MongoClient(process.env.mongodb as string);
             db = mongoClient.db('main');
+
+            console.log(`✅  Successfully connected to MongoDB`);
         }
-    } catch (error) {
-        await handleError(error as Error, `MongoDB Client Connection Failure`);
-        throw new Error(error as string);
-    }
+    }, true);
+}
+
+export async function closeMongoClient(): Promise<void> {
+    return await handleDatabaseOperation(async () => {
+        if (mongoClient) {
+            await mongoClient.close();
+            mongoClient = null;
+        }
+    });
 }
