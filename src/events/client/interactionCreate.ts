@@ -2,6 +2,7 @@ import { BotEvent } from '../../types';
 import { client } from '../../index';
 import { handleError } from '../../utils/errorHandler';
 import { modalInteractions, componentInteractions } from '../../handlers/interactionHandler';
+import { reply } from '../../utils/replyHelper';
 
 const event: BotEvent = {
     name: 'interactionCreate',
@@ -25,6 +26,12 @@ const event: BotEvent = {
                 } catch (error) {
                     console.error(`❌  Failed to execute command ${interaction.commandName}: ${error}`);
                     await handleError(error as Error, `Failed to execute command ${interaction.commandName}`);
+
+                    if (interaction.deferred) {
+                        await reply(false, `Failed to execute command ${interaction.commandName}: ${error}`, interaction, undefined, true, false);
+                    } else {
+                        await reply(false, `Failed to execute command ${interaction.commandName}: ${error}`, interaction, undefined, false, false);
+                    }
                 }
 
                 break;
@@ -39,6 +46,12 @@ const event: BotEvent = {
                 } catch (error) {
                     console.error(`❌  Failed to execute component ${interaction.customId}: ${error}`);
                     await handleError(error as Error, `Failed to execute component ${interaction.customId}`);
+
+                    if (interaction.deferred) {
+                        await reply(false, `Failed to execute component ${interaction.commandName}: ${error}`, interaction, undefined, true, false);
+                    } else {
+                        await reply(false, `Failed to execute component ${interaction.commandName}: ${error}`, interaction, undefined, false, false);
+                    }
                 }
 
                 break;
@@ -53,6 +66,12 @@ const event: BotEvent = {
                 } catch (error) {
                     console.error(`❌  Failed to execute modal ${interaction.customId}: ${error}`);
                     await handleError(error as Error, `Failed to execute modal ${interaction.customId}`);
+
+                    if (interaction.deferred) {
+                        await reply(false, `Failed to execute modal ${interaction.commandName}: ${error}`, interaction, undefined, true, false);
+                    } else {
+                        await reply(false, `Failed to execute modal ${interaction.commandName}: ${error}`, interaction, undefined, false, false);
+                    }
                 }
 
                 break;

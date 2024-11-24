@@ -49,11 +49,14 @@ const event: BotEvent = {
             }
 
             case 'DEV': {
-                const memoryChannel = client.channels.cache.get('1309847699440537612') as TextChannel;
-
+                setTimeout(() => {
+                    console.log(`debug info: mongodb connection ${settings.loadMongoDB}`);
+                }, 2000);
                 setInterval(async () => {
-                    const memory = Math.floor(memoryUsage.rss() / 1000000);
-                    await memoryChannel.send(memory.toString());
+                    console.log(`rss: ${Math.floor(process.memoryUsage().rss / 1000000)} mb`);
+                    console.log(`heap total: ${Math.floor(process.memoryUsage().heapTotal / 1000000)} mb`);
+                    console.log(`heap used: ${Math.floor(process.memoryUsage().heapUsed / 1000000)} mb`);
+                    console.log(`-------------------`);
                 }, 1800000);
 
                 break;
@@ -62,7 +65,6 @@ const event: BotEvent = {
             default: {
                 return;
             }
-            
         }
 
        // const channel = client.channels.cache.get('1301723359591141387') as TextChannel;

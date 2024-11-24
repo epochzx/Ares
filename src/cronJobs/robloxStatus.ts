@@ -4,6 +4,7 @@ import { statusServiceInit } from '../services/robloxStatusService';
 
 const cronJob: CronSchedule = {
     schedule: '*/10 * * * *',
+    environment: 'PROD',
 
     execute: async function() {
         const job = new CronJob(this.schedule, async () => {

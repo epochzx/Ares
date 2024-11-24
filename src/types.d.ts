@@ -17,6 +17,7 @@ export interface Modal {
 
 export interface CronSchedule {
     schedule: string;
+    environment: string;
     execute: (interaction: () => void) => void;
 }
 

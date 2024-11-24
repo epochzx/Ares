@@ -1,6 +1,5 @@
 import { handleError } from '../utils/errorHandler';
 import { MongoClient, Document, WithId, Db } from 'mongodb';
-import mongoose from 'mongoose';
 import settings from '../settings.json';
 
 let mongoClient: MongoClient | null = null;
@@ -34,7 +33,7 @@ export async function getOneDocument<T extends Document>(collectionName: string,
         const collection = db.collection<T>(collectionName);
         return await collection.findOne(query);
     } catch (error) {
-        await handleError(error as Error, `Error getting data from  database`);
+        await handleError(error as Error, `Error getting data from database`);
         throw new Error(`Failed to get data from the database: ${error}`);
     }
 }
@@ -103,10 +102,6 @@ export async function initMongoClient(): Promise<void> {
         if (!mongoClient) {
             mongoClient = new MongoClient(process.env.mongodb as string);
             db = mongoClient.db('main');
-
-            await mongoose.connect(process.env.mongodb as string).then(() => {
-                console.log('✅  Successfully connected to MongoDB');
-            });
         }
     } catch (error) {
         await handleError(error as Error, `MongoDB Client Connection Failure`);

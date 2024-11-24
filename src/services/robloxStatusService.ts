@@ -7,9 +7,21 @@ import { formatTimeSince } from "../utils/miscHelper";
 
 export let robloxStatus = false;
 
+async function fetchWithTimeout(url: string, timeout: number): Promise<Response> {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+
+    try {
+        const response = await fetch(url, { signal: controller.signal });
+        return response;
+    } finally {
+        clearTimeout(id);
+    }
+}
+
 export async function getStatus(): Promise<Array<string>> {
     try {
-        const robloxStatus = await fetch('http://hostedstatus.com/1.0/status/59db90dbcdeb2f04dadcf16d');
+        const robloxStatus = await fetchWithTimeout('http://hostedstatus.com/1.0/status/59db90dbcdeb2f04dadcf16d', 5000);
         const statusResponse: StatusResponse = await robloxStatus.json();
         const overallStatus = statusResponse.result.status_overall;
 
@@ -28,35 +40,26 @@ async function updateStatusEmbed(status: boolean, robloxStatusMessage: string, t
         const statusMessage = await statusChannel.messages.fetch(data.channels.robloxStatusMessage);
         if (!statusMessage) { return; }
 
-        if (status) {
-            const embed = new EmbedBuilder()
-                .setColor(data.colours.success as ColorResolvable)
-                .setTitle('All Roblox Systems Operational')
-                .setDescription(`${data.emojis.success} Roblox endpoints are returning as operational and all API-related systems will function as normal. \n \n` +
-                    `${data.emojis.message} **Status:** \`${robloxStatusMessage}\` \n` +
-                    `${data.emojis.duration} **Roblox has been incident-free for:** \`${formatTimeSince(thisStatusFor * 1000)}\` \n` +
-                    `${data.emojis.time} **Last Updated:** <t:${lastUpdated}:f> (<t:${lastUpdated}:R>)`
-                )
-                .setThumbnail(data.images.checkmark);
+        const embed = new EmbedBuilder()
+            .setColor(status ? data.colours.success as ColorResolvable : data.colours.error as ColorResolvable)
+            .setTitle(status ? 'All Roblox Systems Operational' : 'Roblox Service Disruption')
+            .setDescription(
+                `${status ? data.emojis.success : data.emojis.failure} ${status ? 'Roblox endpoints are operational.' : 'Roblox has reported an issue.'} \n\n` +
+                `${data.emojis.message} **Status:** \`${robloxStatusMessage}\` \n` +
+                `${data.emojis.duration} **Roblox has been ${status ? 'incident-free' : 'down'} for:** \`${formatTimeSince(thisStatusFor * 1000)}\` \n` +
+                `${data.emojis.time} **Last Updated:** <t:${lastUpdated}:f> (<t:${lastUpdated}:R>)`
+            )
+            .setThumbnail(status ? data.images.checkmark : data.images.error);
 
-            await statusMessage.edit({ content: null, embeds: [embed] });
-            await statusChannel.edit({ name: '✅roblox-online' });
-        } else {
+        await statusMessage.edit({ content: null, embeds: [embed] });
+
+        const channelName = status ? '✅roblox-online' : '❌roblox-down';
+        await statusChannel.edit({ name: channelName });
+
+        if (!status) {
             await statusChannel.send('<@366013757702275073>');
-
-            const embed = new EmbedBuilder()
-                .setColor(data.colours.error as ColorResolvable)
-                .setTitle('Roblox is Down')
-                .setDescription(`${data.emojis.success} Roblox has reported an issue. API-related systems have been paused until the issue is resolved. \n \n` +
-                    `${data.emojis.message} **Status:** \`${robloxStatusMessage}\` \n` +
-                    `${data.emojis.duration} **Roblox has been down for:** \`${formatTimeSince(thisStatusFor * 1000)}\` \n` +
-                    `${data.emojis.time} **Last Updated:** <t:${lastUpdated}:f> (<t:${lastUpdated}:R>)`
-                )
-                .setThumbnail(data.images.error);
-
-            await statusMessage.edit({ content: null, embeds: [embed] });
-            await statusChannel.edit({ name: '❌roblox-down' });
         }
+        
     } catch (error) {
         await handleError(error as Error, `Failed to update Roblox status embed`);
         throw new Error(`Failed to update Roblox status embed: ${error}`);

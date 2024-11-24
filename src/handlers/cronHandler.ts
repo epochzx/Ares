@@ -20,6 +20,10 @@ export default async function loadCronJobs(): Promise<void> {
             const jobModule = await import(filePath);
             const job = jobModule.default;
 
+            if (!(job.environment == process.env.environment)) {
+                continue;
+            };
+
             job.execute();
             loadedCount++;
         } catch (error) {
