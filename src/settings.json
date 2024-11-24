@@ -5,5 +5,5 @@
     "loadCron": true,
     "loadGuildEvents": true,
     "loadExistingDutyStates": true,
-    "loadMongoDB": true
+    "loadMongoDB": false
 }

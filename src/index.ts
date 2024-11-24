@@ -101,7 +101,7 @@ process.on('unhandledRejection', async error => {
     return;
 });
 
-[`exit`, `SIGINT`, `SIGUSR1`, `SIGUSR2`, `uncaughtException`, `SIGTERM`].forEach((eventType) => {
+[`exit`, `SIGINT`, `SIGTERM`].forEach((eventType) => {
     process.on(eventType, async () => {
         await closeMongoClient();
         process.exit();

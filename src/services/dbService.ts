@@ -6,11 +6,9 @@ import settings from '../settings.json';
 let mongoClient: MongoClient | null = null;
 let db: Db | null = null;
 
-async function handleDatabaseOperation<T>(operation: () => Promise<T>, force?: boolean): Promise<T> {
-    if (!force) {
-        if (!mongoClient || !db) {
-            throw new Error('MongoClient or DB not initialised');
-        }
+async function handleDatabaseOperation<T>(operation: () => Promise<T>): Promise<T> {
+    if (!mongoClient || !db) {
+        throw new Error('MongoClient or DB not initialised');
     }
 
     try {
@@ -34,7 +32,7 @@ export async function getDocuments<T extends Document>(collectionName: string, q
 }
 
 export async function getOneDocument<T extends Document>(collectionName: string, query: object): Promise<WithId<T> | null> {
-    return await handleDatabaseOperation(() => {
+    return await handleDatabaseOperation(async () => {
         const collection = db!.collection<T>(collectionName);
         return collection.findOne(query);
     });
@@ -83,14 +81,12 @@ export async function initMongoClient(): Promise<void> {
         return;
     }
 
-    return await handleDatabaseOperation(async () => {
-        if (!mongoClient) {
-            mongoClient = new MongoClient(process.env.mongodb as string);
-            db = mongoClient.db('main');
+    if (!mongoClient) {
+        mongoClient = new MongoClient(process.env.mongodb as string);
+        db = mongoClient.db('main');
 
-            console.log(`✅  Successfully connected to MongoDB`);
-        }
-    }, true);
+        console.log(`✅  Successfully connected to MongoDB`);
+    }
 }
 
 export async function closeMongoClient(): Promise<void> {
