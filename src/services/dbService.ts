@@ -94,10 +94,10 @@ export async function initMongoClient(): Promise<void> {
 }
 
 export async function closeMongoClient(): Promise<void> {
-    return await handleDatabaseOperation(async () => {
-        if (mongoClient) {
-            await mongoClient.close();
-            mongoClient = null;
-        }
-    });
+    if (mongoClient) {
+        await mongoClient.close();
+        mongoClient = null;
+
+        console.log(`❌  MongoDB connection closed`);
+    }
 }
