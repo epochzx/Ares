@@ -27,7 +27,11 @@ export async function handleError(error: Error, title?: string): Promise<void> {
         .setDescription(`❌ **Error** \n\`\`\`\n${errorMessage}\n\`\`\`\n` +
             `📝 **Origin** \n\`\`\`ts\n${origin}\n\`\`\`\n` +
             `📜 **Stack Trace** \n\`\`\`ts\n${stack}\n\`\`\`\n`
-        );
+        )
+        .setAuthor({
+            name: client.user?.username as string,
+            iconURL: `https://cdn.discordapp.com/avatars/${client.user?.id}/${client.user?.avatar}.png?size=256`
+        });;
 
     if (client.isReady()) {
         const errorChannel = await client.channels.fetch(data.channels.errorLogging) as TextChannel;

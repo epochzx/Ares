@@ -85,6 +85,6 @@ export async function initMongoClient(): Promise<void> {
         mongoClient = new MongoClient(process.env.mongodb as string);
         db = mongoClient.db('main');
 
-        console.log(`✅  Successfully connected to MongoDB`);
+        console.log(`✅  Successfully initialised MongoDB`);
     }
 }
