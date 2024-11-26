@@ -4,10 +4,7 @@ import { BotEvent, StatusResponse } from '../../types';
 import data from '../../data.json';
 import { reconcileDutyStates } from '../../services/dutyStateService';
 import { getPrimaryColour } from '../../utils/replyHelper';
-import { env, memoryUsage } from 'process';
 import settings from '../../settings.json';
-import axios from 'axios';
-import { statusServiceInit } from '../../services/robloxStatusService';
 
 const event: BotEvent = {
     name: 'ready',
@@ -27,7 +24,9 @@ const event: BotEvent = {
         switch (environment) {
             case 'PROD': {
                 if (settings.loadExistingDutyStates) {
-                    await reconcileDutyStates();
+                    if (settings.loadMongoDB) {
+                        await reconcileDutyStates();
+                    }
                 } else {
                     console.log(`✖️   Existing duty state loading has been disabled`);
                 }
@@ -49,16 +48,16 @@ const event: BotEvent = {
             }
 
             case 'DEV': {
-                setTimeout(() => {
-                    console.log(`debug info: mongodb connection ${settings.loadMongoDB}`);
-                }, 2000);
-                setInterval(async () => {
-                    console.log(`rss: ${Math.floor(process.memoryUsage().rss / 1000000)} mb`);
-                    console.log(`heap total: ${Math.floor(process.memoryUsage().heapTotal / 1000000)} mb`);
-                    console.log(`heap used: ${Math.floor(process.memoryUsage().heapUsed / 1000000)} mb`);
-                    console.log(`-------------------`);
-                }, 1800000);
+                const channel = client.channels.cache.get('1309847699440537612') as TextChannel;
 
+                const embed = new EmbedBuilder();
+
+                setInterval(async () => {
+                    embed.setDescription(`rss: ${Math.floor(process.memoryUsage().rss / 1000000)} mb \nheap total: ${Math.floor(process.memoryUsage().heapTotal / 1000000)} mb \nheap used: ${Math.floor(process.memoryUsage().heapUsed / 1000000)} mb`);
+
+                    await channel.send({ embeds: [embed] });
+                }, 1800000);
+                
                 break;
             }
 

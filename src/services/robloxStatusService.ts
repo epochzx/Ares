@@ -19,7 +19,7 @@ async function fetchWithTimeout(url: string, timeout: number): Promise<Response>
     }
 }
 
-export async function getStatus(): Promise<Array<string>> {
+export async function getRobloxStatus(): Promise<Array<string>> {
     try {
         const robloxStatus = await fetchWithTimeout('http://hostedstatus.com/1.0/status/59db90dbcdeb2f04dadcf16d', 5000);
         const statusResponse: StatusResponse = await robloxStatus.json();
@@ -32,7 +32,7 @@ export async function getStatus(): Promise<Array<string>> {
     }
 }
 
-async function updateStatusEmbed(status: boolean, robloxStatusMessage: string, thisStatusFor: number, lastUpdated: number): Promise<void> {
+export async function updateStatusEmbed(status: boolean, robloxStatusMessage: string, thisStatusFor: number, lastUpdated: number): Promise<void> {
     try {
         const statusChannel = client.channels.cache.get(data.channels.robloxStatus) as TextChannel;
         if (!statusChannel) { return; }
@@ -66,9 +66,9 @@ async function updateStatusEmbed(status: boolean, robloxStatusMessage: string, t
     }
 }
 
-export async function statusServiceInit(): Promise<void> {
+export async function checkRobloxStatus(): Promise<void> {
     try {
-        const currentStatus = await getStatus();
+        const currentStatus = await getRobloxStatus();
         const lastUpdatedSeconds = Math.floor((new Date().getTime()) / 1000);
         const robloxStatusLastUpdatedSeconds = Math.floor((new Date(currentStatus[0]).getTime()) / 1000);
 

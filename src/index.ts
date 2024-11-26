@@ -3,9 +3,9 @@ import { readdirSync } from 'fs';
 import { join } from 'path';
 import { SlashCommand } from './types';
 
-import { closeMongoClient, initMongoClient } from './services/dbService';
-
 import 'dotenv/config';
+
+import { initMongoClient } from './services/dbService';
 import { handleError } from './utils/errorHandler';
 
 const myIntents = new IntentsBitField();
@@ -99,11 +99,4 @@ process.on('unhandledRejection', async error => {
     console.log(error);
 
     return;
-});
-
-[`exit`, `SIGINT`, `SIGTERM`].forEach((eventType) => {
-    process.on(eventType, async () => {
-        await closeMongoClient();
-        process.exit();
-    });
 });

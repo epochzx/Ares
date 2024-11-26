@@ -88,12 +88,3 @@ export async function initMongoClient(): Promise<void> {
         console.log(`✅  Successfully connected to MongoDB`);
     }
 }
-
-export async function closeMongoClient(): Promise<void> {
-    if (mongoClient) {
-        await mongoClient.close();
-        mongoClient = null;
-
-        console.log(`❌  MongoDB connection closed`);
-    }
-}
