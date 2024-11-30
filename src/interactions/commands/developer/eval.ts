@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, CommandInteraction, ColorResolvable } from 'discord.js';
+import { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, CommandInteraction, ColorResolvable, PermissionsBitField } from 'discord.js';
 import { SlashCommand } from '../../../types';
 import { reply } from '../../../utils/replyHelper';
 import data from '../../../data.json';
@@ -17,9 +17,19 @@ const command: SlashCommand = {
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
     execute: async (interaction: CommandInteraction) => {
+        const botPermissions = [];
+        
+        for (const perm of Object.keys(PermissionsBitField.Flags) as Array<keyof typeof PermissionsBitField.Flags>) {
+            if (interaction.appPermissions.has(PermissionsBitField.Flags[perm])) {
+                botPermissions.push(perm);
+            }
+        }
+
+        const ephemeral = botPermissions.includes('SendMessages') ? false : true;
+
         try {
             await interaction.deferReply({
-                ephemeral: false
+                ephemeral: ephemeral
             });
         } catch {
             return;
@@ -41,7 +51,7 @@ const command: SlashCommand = {
 
         const clean = async (text: string) => {
             if (typeof text !== 'string') {
-                // eslint-disable-next-line @typescript-eslint/no-var-requires
+                // eslint-disable-next-line @typescript-eslint/no-require-imports
                 text = require('util').inspect(text, {depth: 1});
             }
 

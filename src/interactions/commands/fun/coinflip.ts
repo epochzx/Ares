@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { PermissionsBitField, SlashCommandBuilder } from 'discord.js';
 import { SlashCommand } from '../../../types';
 import { reply } from '../../../utils/replyHelper';
 
@@ -10,9 +10,19 @@ export const command: SlashCommand = {
         .setIntegrationTypes([0, 1]),
 
     execute: async (interaction) => {
+        const botPermissions = [];
+        
+        for (const perm of Object.keys(PermissionsBitField.Flags) as Array<keyof typeof PermissionsBitField.Flags>) {
+            if (interaction.appPermissions.has(PermissionsBitField.Flags[perm])) {
+                botPermissions.push(perm);
+            }
+        }
+
+        const ephemeral = botPermissions.includes('SendMessages') ? false : true;
+
         try {
             await interaction.deferReply({
-                ephemeral: false
+                ephemeral: ephemeral
             });
         } catch {
             return;

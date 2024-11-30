@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { SlashCommandBuilder, TextChannel, ThreadChannel, PermissionFlagsBits, ChatInputCommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, TextChannel, ThreadChannel, PermissionFlagsBits, ChatInputCommandInteraction, PermissionsBitField } from 'discord.js';
 import { SlashCommand } from '../../../types';
 import { pluralize, reply } from '../../../utils/replyHelper';
 import noblox, { PlayerInfo, PlayerThumbnailData } from 'noblox.js';
@@ -18,9 +18,19 @@ export const command: SlashCommand = {
                 .setRequired(true)),
 
     execute: async (interaction) => {
+        const botPermissions = [];
+        
+        for (const perm of Object.keys(PermissionsBitField.Flags) as Array<keyof typeof PermissionsBitField.Flags>) {
+            if (interaction.appPermissions.has(PermissionsBitField.Flags[perm])) {
+                botPermissions.push(perm);
+            }
+        }
+
+        const ephemeral = botPermissions.includes('SendMessages') ? false : true;
+
         try {
             await interaction.deferReply({
-                ephemeral: false
+                ephemeral: ephemeral
             });
         } catch {
             return;
