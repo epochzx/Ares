@@ -1,4 +1,4 @@
-import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } from 'discord.js';
 import { SlashCommand } from '../../../types';
 import { getPrimaryColour, reply } from '../../../utils/replyHelper';
 import noblox, { PlayerInfo } from 'noblox.js';
@@ -18,9 +18,19 @@ export const command: SlashCommand = {
                 .setRequired(true)),
 
     execute: async (interaction) => {
+        const botPermissions = [];
+        
+        for (const perm of Object.keys(PermissionsBitField.Flags) as Array<keyof typeof PermissionsBitField.Flags>) {
+            if (interaction.appPermissions.has(PermissionsBitField.Flags[perm])) {
+                botPermissions.push(perm);
+            }
+        }
+
+        const ephemeral = botPermissions.includes('SendMessages') ? true : false;
+
         try {
             await interaction.deferReply({
-                ephemeral: false
+                ephemeral: ephemeral
             });
         } catch {
             return;
@@ -30,12 +40,10 @@ export const command: SlashCommand = {
             return;
         }
 
-        console.log(interaction);
-
         const target = interaction.options.getString('username');
 
         const timeNow = Math.round(new Date().getTime() / 1000);
-        await reply(true, `Pending check on \`${target}\` (<t:${timeNow}:R>)`, interaction, undefined, true, false, true);
+        await reply(true, `Pending check on \`${target}\` (<t:${timeNow}:R>)`, interaction, undefined, true, ephemeral, true);
 
         let username: string | undefined;
         let userId: number | undefined;
@@ -44,7 +52,7 @@ export const command: SlashCommand = {
         try {
             ({ username, userId, playerInfo } = await validateRobloxUser(target as string));
         } catch (error) {
-            await reply(false, error as string, interaction);
+            await reply(false, error as string, interaction, undefined);
 
             return;
         }
@@ -67,8 +75,8 @@ export const command: SlashCommand = {
             mostRecentUsername = `\`${pastUsernames[0]}\``;
             robuxSpent = `\`${String((1000 * pastUsernames.length).toLocaleString())}\``;
             pastUsernamesFinal = `\n\`\`\`${pastUsernamesFinal}\n\`\`\``;
-        } 
-
+        }
+    
         const embed = new EmbedBuilder()
             .setColor(await getPrimaryColour())
             .setTitle(`${username}'s Past Usernames`)
@@ -82,7 +90,7 @@ export const command: SlashCommand = {
             );
 
         await interaction.editReply({
-            embeds: [embed]
+            embeds: [embed],
         });
     }
 };
