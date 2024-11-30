@@ -3,7 +3,7 @@
     "loadComponents": true,
     "loadModals": true,
     "loadCron": false,
-    "loadGuildEvents": true,
-    "loadExistingDutyStates": true,
+    "loadGuildEvents": false,
+    "loadExistingDutyStates": false,
     "loadMongoDB": true
 }

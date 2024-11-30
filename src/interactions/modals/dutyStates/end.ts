@@ -1,8 +1,7 @@
 import { Modal, DutyState } from "../../../types";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, GuildMember, ModalSubmitInteraction } from "discord.js";
 import { getTimeString } from "../../../utils/dutyStateHelper";
-import { endDutyState } from "../../../services/dutyStateService";
-import { getOneDocument } from "../../../services/dbService";
+import { deleteDocument, getOneDocument } from "../../../services/dbService";
 import { formatTimeSince } from "../../../utils/miscHelper";
 import data from '../../../data.json';
 import { logUserInteraction } from "../../../services/loggingService";
@@ -98,7 +97,7 @@ const event: Modal = {
             components: [actionRow]
         });
 
-        await endDutyState(interaction.channel.id);
+        await deleteDocument(`aresDutyStates`, { threadId: interaction.channel.id });
         await interaction.deferUpdate();
         await logUserInteraction(interaction.member as GuildMember, `ended a duty state`);
     }

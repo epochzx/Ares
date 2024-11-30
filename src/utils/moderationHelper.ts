@@ -58,7 +58,7 @@ export async function getDuration(duration: string): Promise<number | boolean> {
         return false;
     }
 
-    const validUnits = new Set(['s', 'm', 'h', 'd', 'y']);
+    const validUnits = new Set(['s', 'h', 'd', 'm', 'y']);
     if (!validUnits.has(unit)) {
         return false;
     }

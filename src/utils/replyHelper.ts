@@ -4,7 +4,7 @@ import data from '../data.json';
 import { handleError } from './errorHandler';
 import { AutoResponse, GenericData } from '../types';
 
-export async function reply(state: boolean, text: string, interaction: CommandInteraction | ButtonInteraction | ModalSubmitInteraction | StringSelectMenuInteraction, actionRow?: ActionRowBuilder<ButtonBuilder>, deferred?: boolean, ephemeral?: boolean): Promise<void> {
+export async function reply(state: boolean, text: string, interaction: CommandInteraction | ButtonInteraction | ModalSubmitInteraction | StringSelectMenuInteraction, actionRow?: ActionRowBuilder<ButtonBuilder>, deferred?: boolean, ephemeral?: boolean, caution?: boolean): Promise<void> {
     try {
         const embed = new EmbedBuilder()
             .setColor((state ? await getPrimaryColour() : (data.colours.error as ColorResolvable) ))
@@ -13,6 +13,11 @@ export async function reply(state: boolean, text: string, interaction: CommandIn
                     ? `${data.emojis.success}  ${text}`
                     : `${data.emojis.failure}  ${text}`
             );
+
+        if (caution) {
+            embed.setDescription(`${data.emojis.caution}  ${text}`);
+            embed.setColor(data.colours.caution as ColorResolvable);
+        }
 
         ephemeral = ephemeral ?? false;
 

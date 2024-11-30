@@ -20,9 +20,14 @@ const event: BotEvent = {
         });
 
         const environment = process.env.environment;
+        
+        setTimeout(() => {
+            console.log(environment);
+        }, 5000);
 
         switch (environment) {
             case 'PROD': {
+                // check active duty states
                 if (settings.loadExistingDutyStates) {
                     if (settings.loadMongoDB) {
                         await reconcileDutyStates();
@@ -31,6 +36,7 @@ const event: BotEvent = {
                     console.log(`✖️   Existing duty state loading has been disabled`);
                 }
 
+                // send ready message
                 const processLogs = client.channels.cache.get(data.channels.processLogging) as NewsChannel | TextChannel;
 
                 const restartedEmbed = new EmbedBuilder()

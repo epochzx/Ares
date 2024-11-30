@@ -26,15 +26,11 @@ export async function beginDutyState(author: string, threadId: string, started: 
     // 1800000
 }
 
-export async function endDutyState(threadId: string): Promise<void> {
-    await deleteDocument(`aresDutyStates`, { threadId: threadId });
-}
-
 export async function reconcileDutyStates(): Promise<void> {
     const activeDutyStates = await getDocuments<DutyState>('aresDutyStates', {});
 
     if (!activeDutyStates.length) {
-        console.log('   No active duty states');
+        console.log('    No active duty states');
 
         return;
     }

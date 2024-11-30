@@ -5,7 +5,7 @@ export default function getFiles(dir: string): string[] {
     const results: string[] = [];
     const files = readdirSync(dir);
 
-    files.forEach((file) => {
+    for (const file of files) {
         const filePath = join(dir, file);
         const stat = statSync(filePath);
 
@@ -14,7 +14,7 @@ export default function getFiles(dir: string): string[] {
         } else if (file.endsWith('.ts') || file.endsWith('.js')) {
             results.push(filePath);
         }
-    });
+    }
 
     return results;
 }
