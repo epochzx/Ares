@@ -26,7 +26,7 @@ export const command: SlashCommand = {
             }
         }
 
-        const ephemeral = botPermissions.includes('SendMessages') ? true : false;
+        const ephemeral = botPermissions.includes('SendMessages') ? false : true;
 
         try {
             await interaction.deferReply({
