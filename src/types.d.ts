@@ -1,8 +1,14 @@
-import { SlashCommandBuilder, CommandInteraction, Collection, ButtonInteraction, ModalSubmitInteraction, ChatInputCommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, CommandInteraction, Collection, ButtonInteraction, ModalSubmitInteraction, ChatInputCommandInteraction, ContextMenuCommandBuilder, ContextMenuCommandInteraction } from 'discord.js';
+import { PlayerInfo } from 'noblox.js';
 
 export interface SlashCommand {
     command: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
     execute: (interaction: CommandInteraction | ChatInputCommandInteraction) => void;
+}
+
+export interface ContextMenuCommand {
+    command: ContextMenuCommandBuilder;
+    execute: (interaction: ContextMenuCommandInteraction) => void;
 }
 
 export interface Component {
@@ -26,6 +32,13 @@ export interface BotEvent {
     once?: boolean | false;
     guild: boolean;
     execute: (...args) => void;
+}
+
+export interface RobloxUser {
+    username: string;
+    userId: number;
+    isBanned: boolean;
+    playerInfo: PlayerInfo;
 }
 
 export interface Infraction {

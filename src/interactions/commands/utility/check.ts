@@ -2,7 +2,8 @@
 import { SlashCommandBuilder, TextChannel, ThreadChannel, PermissionFlagsBits, ChatInputCommandInteraction } from 'discord.js';
 import { SlashCommand } from '../../../types';
 import { pluralize, reply } from '../../../utils/replyHelper';
-import noblox, { PlayerThumbnailData } from 'noblox.js';
+import noblox, { PlayerInfo, PlayerThumbnailData } from 'noblox.js';
+import { validateRobloxUser } from '../../../utils/robloxHelper';
 
 export const command: SlashCommand = {
     command: new SlashCommandBuilder()
@@ -32,28 +33,19 @@ export const command: SlashCommand = {
         const timeNow = Math.round(new Date().getTime() / 1000);
         
         // validate user to check
-        const username = interaction.options.getString('username');
-        const userId = await noblox.getIdFromUsername(username as string);
+        const target = interaction.options.getString('username');
 
-        if (!userId) {
-            await reply(false, `\`${username}\` was not found on Roblox.`, interaction);
+        let username: string | undefined;
+        let userId: number | undefined;
+        let playerInfo: PlayerInfo | undefined;
 
-            return;
-        };
-
-        const playerInfo = await noblox.getPlayerInfo(userId);
-        
-        if (!playerInfo) {
-            await reply(false, `\`${username}\` was not found on Roblox.`, interaction);
+        try {
+            ({ username, userId, playerInfo } = await validateRobloxUser(target as string));
+        } catch (error) {
+            await reply(false, error as string, interaction);
 
             return;
-        };
-
-        if (playerInfo.isBanned) {
-            await reply(false, `\`${username}\` is banned from Roblox.`, interaction);
-    
-            return;
-        };
+        }
 
         await reply(true, `Pending check on \`${username}\` (<t:${timeNow}:R>)`, interaction, undefined, true, false, true);
 

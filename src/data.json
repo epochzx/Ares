@@ -54,6 +54,8 @@
     "delete": "<:delete:1301464766845554688>",
     "play": "<:round_play_arrow_white_48dp:1129316616346288148>",
 
+    "robuxGreen": "<:robuxgreen:1312349678804930610>",
+
     "id": "<:sid:1260861376784760904>",
     "colour": "<:colour:1282609320131035187>",
     "position": "<:position:1282610885185114112>",
@@ -61,6 +63,7 @@
     "hoisted": "<:hoisted:1282609608380252251>",
     "user": "<:round_person_white_48dp:1224579843950379100>",
     "userGroup": "<:round_group_white_48dp:1208298524530450462>",
+    "userSlash": "<:user_slash:1312348290888499230>",
     "adminUser": "<:admin:1260931922448879659>",
     "reason": "<:reason:1301054021238394901>",
     "hashtag": "<:hashtag:1301057331014008843>",
