@@ -8,6 +8,8 @@ export async function validateRobloxUser(username: string): Promise<RobloxUser> 
         throw new Error(`\`${username}\` was not found on Roblox.`);
     };
 
+    const upToDateUsername = await noblox.getUsernameFromId(userId);
+
     const playerInfo = await noblox.getPlayerInfo(userId);
         
     if (!playerInfo) {
@@ -19,7 +21,7 @@ export async function validateRobloxUser(username: string): Promise<RobloxUser> 
     };
 
     const robloxUser: RobloxUser = {
-        username: username,
+        username: upToDateUsername,
         userId: userId,
         isBanned: false,
         playerInfo: playerInfo
