@@ -1,4 +1,4 @@
-import { EmbedBuilder, ColorResolvable, ThreadChannel } from 'discord.js';
+import { EmbedBuilder, ColorResolvable, ThreadChannel, TextChannel } from 'discord.js';
 import { client } from '../index';
 import { createDocument, deleteDocument, getDocuments, getOneDocument } from "./dbService";
 import { pluralize } from '../utils/replyHelper';
@@ -91,6 +91,28 @@ export async function reconcileDutyStates(): Promise<void> {
             await thread.send({
                 embeds: [embed]
             });
+        }
+    }
+}
+
+export async function handleOldDutyStateThreads(): Promise<void> {
+    const dutyStatesChannel = client.channels.cache.get(data.channels.dutyStates) as TextChannel;
+    const fetchedThreads = await dutyStatesChannel.threads.fetch();
+
+    for (const thread of fetchedThreads.threads.values()) {
+        const existingDutyState = await getOneDocument(`aresDutyStates`, { threadId: thread.id });
+        if (existingDutyState) { return; };
+
+        const created = thread.createdTimestamp || 0;
+        const createdSeconds = Math.floor(created / 1000);
+        const existedSeconds = (Math.floor(new Date().getTime() / 1000) - createdSeconds);
+        
+        if (existedSeconds >= 172800) {
+            try {
+                await thread.delete();
+            } catch {
+                return;
+            }
         }
     }
 }

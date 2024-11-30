@@ -2,7 +2,7 @@
 import { Client, ActivityType, PresenceUpdateStatus, TextChannel, EmbedBuilder, NewsChannel, ColorResolvable, ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder, MediaChannel } from 'discord.js';
 import { BotEvent, StatusResponse } from '../../types';
 import data from '../../data.json';
-import { reconcileDutyStates } from '../../services/dutyStateService';
+import { handleOldDutyStateThreads, reconcileDutyStates } from '../../services/dutyStateService';
 import { getPrimaryColour } from '../../utils/replyHelper';
 import settings from '../../settings.json';
 
@@ -32,6 +32,8 @@ const event: BotEvent = {
                     if (settings.loadMongoDB) {
                         await reconcileDutyStates();
                     }
+
+                    await handleOldDutyStateThreads();
                 } else {
                     console.log(`✖️   Existing duty state loading has been disabled`);
                 }
