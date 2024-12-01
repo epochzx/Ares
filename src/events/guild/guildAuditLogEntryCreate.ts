@@ -69,6 +69,14 @@ const event: BotEvent = {
                 break;
             }
 
+            case AuditLogEvent.InviteUpdate: {
+                if (auditLog.target instanceof Invite) {
+                    await logInviteCreate(auditLog.target.inviterId as string, guild.id, auditLog.target.code as string);
+                }
+
+                break;
+            }
+
             default: {
                 return;
             }
