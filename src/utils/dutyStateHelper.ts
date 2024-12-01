@@ -23,12 +23,11 @@ export async function getTimeString(userId: string): Promise<string> {
     }
     
     const userTimezone = await getOneDocument<UserTimezone>(`timezones`, {userId: userId});
-    if (!userTimezone) { return 'GMT'; }
     
     let offset;
     let suffix;
     
-    if (Object.is(userTimezone, null)) {
+    if (!userTimezone) {
         offset = '0';
     } else {
         offset = userTimezone['gmtOffset'];

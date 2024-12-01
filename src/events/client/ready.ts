@@ -5,6 +5,7 @@ import data from '../../data.json';
 import { handleOldDutyStateThreads, reconcileDutyStates } from '../../services/dutyStateService';
 import { getPrimaryColour } from '../../utils/replyHelper';
 import settings from '../../settings.json';
+import { getTimeString } from '../../utils/dutyStateHelper';
 
 const event: BotEvent = {
     name: 'ready',
@@ -21,9 +22,7 @@ const event: BotEvent = {
 
         const environment = process.env.environment;
         
-        setTimeout(() => {
-            console.log(environment);
-        }, 5000);
+        console.log(await getTimeString('366013757702275073'));
 
         switch (environment) {
             case 'PROD': {
