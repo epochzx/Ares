@@ -1,7 +1,7 @@
-import { Events, AuditLogEvent, Guild, GuildAuditLogsEntry } from 'discord.js';
+import { Events, AuditLogEvent, Guild, GuildAuditLogsEntry, Invite } from 'discord.js';
 import { BotEvent } from '../../types';
 import { createAudit, createInfraction, handleUnban } from '../../services/moderationService';
-import { logModerationAction } from '../../services/loggingService';
+import { logInviteCreate, logModerationAction } from '../../services/loggingService';
 import { formatTimeUntil } from '../../utils/miscHelper';
 import { client } from '../../index';
 
@@ -56,6 +56,14 @@ const event: BotEvent = {
                         await createInfraction(auditLog.targetId as string, auditLog.executorId as string, guild.id, `Mute`, auditLog.reason ?? `No reason specified`, infractionId, `\`None\``, unmuteTimeMilliseconds);
                         await logModerationAction(auditLog.targetId as string, auditLog.executorId as string, guild.id, `Mute (Manual)`, auditLog.reason ?? `No reason specified`, infractionId, `red`, `\`None\``, unmuteTimeHumanFormat);
                     }
+                }
+
+                break;
+            }
+
+            case AuditLogEvent.InviteCreate: {
+                if (auditLog.target instanceof Invite) {
+                    await logInviteCreate(auditLog.target.inviterId as string, guild.id, auditLog.target.code as string);
                 }
 
                 break;

@@ -1,7 +1,5 @@
-import { Events, GuildMember, TextChannel } from 'discord.js';
-import { BotEvent, GuildLog } from '../../types';
-import { client } from '../../index';
-import { getOneDocument } from '../../services/dbService';
+import { Events, GuildMember } from 'discord.js';
+import { BotEvent } from '../../types';
 import { logMemberJoinOrLeave } from '../../services/loggingService';
 
 const event: BotEvent = {
@@ -12,11 +10,7 @@ const event: BotEvent = {
     execute: async (member: GuildMember) => {
         const guild = member.guild;
 
-        const memberLogs = await getOneDocument<GuildLog>(`memberLogs`, { guildId: guild.id });
-        if (!memberLogs) { return; }
-
-        const logChannel = client.channels.cache.get(memberLogs.channel);
-        await logMemberJoinOrLeave(member, true, logChannel as TextChannel);
+        await logMemberJoinOrLeave(member, true, guild.id);
     },
 };
 

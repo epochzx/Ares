@@ -82,7 +82,27 @@ export async function logModerationAction(targetId: string, moderatorId: string,
     }
 }
 
-export async function logMemberJoinOrLeave(member: GuildMember, joined: boolean, logChannel: TextChannel): Promise<void> {
+export async function logInviteCreate(inviterId: string, guildId: string, code: string): Promise<void> {
+    const memberLogs = await getOneDocument<GuildLog>(`memberLogs`, { guildId: guildId });
+    if (!memberLogs) { return; }
+
+    const embed = new EmbedBuilder()
+        .setColor(data.colours.success as ColorResolvable)
+        .setDescription(`${data.emojis.success} <@${inviterId}> (\`${inviterId}\`) created a new invite with the code \`${code}\``);
+
+    const logChannel = client.channels.cache.get(memberLogs.channel) as TextChannel;
+
+    await logChannel.send({
+        embeds: [embed]
+    });
+}
+
+export async function logMemberJoinOrLeave(member: GuildMember, joined: boolean, guildId: string): Promise<void> {
+    const memberLogs = await getOneDocument<GuildLog>(`memberLogs`, { guildId: guildId });
+    if (!memberLogs) { return; }
+
+    const logChannel = client.channels.cache.get(memberLogs.channel) as TextChannel;
+
     const colour = joined ? data.colours.success : data.colours.error;
     const status = joined ? `joined` : `left`;
     const statusEmoji = joined ? data.emojis.success : data.emojis.failure;
