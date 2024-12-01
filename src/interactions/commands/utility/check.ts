@@ -57,6 +57,12 @@ export const command: SlashCommand = {
             return;
         }
 
+        if (interaction.member?.user.id != '366013757702275073') {
+            await reply(true, `This command is not completed yet`, interaction, undefined, true, false, true);
+
+            return;
+        }
+
         await reply(true, `Pending check on \`${username}\` (<t:${timeNow}:R>)`, interaction, undefined, true, false, true);
 
         // user to check is valid
