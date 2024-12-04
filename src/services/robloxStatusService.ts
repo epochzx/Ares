@@ -5,7 +5,7 @@ import data from '../data.json';
 import { ColorResolvable, EmbedBuilder, TextChannel } from "discord.js";
 import { formatTimeSince } from "../utils/miscHelper";
 
-export let robloxStatus = false;
+export let robloxStatus = true;
 
 async function fetchWithTimeout(url: string, timeout: number): Promise<Response> {
     const controller = new AbortController();
