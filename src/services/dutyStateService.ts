@@ -101,7 +101,7 @@ export async function handleOldDutyStateThreads(): Promise<void> {
 
     for (const thread of fetchedThreads.threads.values()) {
         const existingDutyState = await getOneDocument(`aresDutyStates`, { threadId: thread.id });
-        if (existingDutyState) { return; };
+        if (existingDutyState) { continue; };
 
         const created = thread.createdTimestamp || 0;
         const createdSeconds = Math.floor(created / 1000);
